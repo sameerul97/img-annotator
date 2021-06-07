@@ -1,0 +1,4 @@
+node_modules/
+old_/
+server/api/popup_images/
+server/api/user_images/

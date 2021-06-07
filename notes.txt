@@ -1,0 +1,18 @@
+Questions
+    Debounce it, instead of one time saving / updating ? 
+    -> 
+
+
+
+
+Station SQL
+INSERT INTO `Stations` (`id`, `name`) VALUES
+(1,	'Magic'),
+(3,	'Absolute'),
+(4,	'Kiss'),
+(5,	'Scala'),
+(6,	'Jazz'),
+(7,	'Hits'),
+(8,	'Pirate FM'),
+(9,	'Planet Rock'),
+(10,	'Clyde');

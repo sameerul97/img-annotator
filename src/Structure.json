@@ -1,0 +1,30 @@
+{
+  "Why Structure.json file": "Explains how the marker and popup data is strucured / stored ?",
+
+  "comments for object below":"Data object below holds the root level data. Should hold\nImageid, url, marker_positions",
+  "image": {
+    "id": 1,
+    "name": "test img 1",
+    "url": "https://images.unsplash.com/photo-1542362567-b07e5…cHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+    "marker_positions": [
+      {
+        "m_id": 10,
+        "top": 553.8461538461539,
+        "left": 180.12253233492171,
+        "popup_id": 100,
+        "color": "#64ffda",
+        "animationType": "pulse2",
+        "markerType": "default"
+      },
+      {
+        "m_id": 20,
+        "top": 606.5350578624915,
+        "left": 465.62287270251875,
+        "popup_id": 101,
+        "color": "#009688",
+        "animationType": "pulse2",
+        "markerType": "default"
+      }
+    ]
+  }
+}
