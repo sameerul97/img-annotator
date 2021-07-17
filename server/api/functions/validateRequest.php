@@ -29,7 +29,7 @@ function validRequest($headers)
             $tokenValidate = json_decode(validateToken($value));
 
             if (!$tokenValidate->success) {
-                http_response_code(440);
+                http_response_code(401);
                 // throw new Exception($tokenValidate->message);
                 throw new Exception("Auth fail");;
                 // return true;
@@ -40,7 +40,7 @@ function validRequest($headers)
     }
 
     if (!$auth_header_found) {
-        http_response_code(443);
+        http_response_code(401);
         throw new Exception("No auth header");;
     }
 }

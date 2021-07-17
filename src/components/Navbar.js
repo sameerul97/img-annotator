@@ -3,6 +3,11 @@ import { NavLink } from "react-router-dom";
 import { HashRouter } from "react-router-dom";
 
 function Navbar(props) {
+
+  const logOut = () => {
+    props.logout();
+  };
+
   return (
     <HashRouter>
       <nav className="navbar navbar-expand-lg navbar-dark bg-info">
@@ -25,87 +30,48 @@ function Navbar(props) {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <NavLink
-                exact
-                to="/"
-                className="nav-link"
-                activeClassName="nav-link active"
-              >
-                Home
-              </NavLink>
-            </li>
-
-            {props.userLoggedIn && (
-              <li className="nav-item">
-                <NavLink
-                  exact
-                  to="/images"
-                  className="nav-link"
-                  activeClassName="nav-link active"
-                >
-                  View All
-                </NavLink>
-              </li>
-            )}
-            {props.userLoggedIn && (
-              <li className="nav-item">
-                <NavLink
-                  exact
-                  to="/create"
-                  className="nav-link"
-                  activeClassName="nav-link active"
-                >
-                  Create
-                </NavLink>
-              </li>
-            )}
-            {props.userLoggedIn && (
-              <li className="nav-item">
-                <NavLink
-                  exact
-                  to="/dashboard"
-                  className="nav-link"
-                  activeClassName="nav-link active"
-                >
-                  Dashboard
-                </NavLink>
-              </li>
-            )}
+            <NavBarLinkButton name="Home" to="/" />
+            {
+              props.userLoggedIn ? (
+                <React.Fragment>
+                  <NavBarLinkButton name="View All" to="/images" />
+                  <NavBarLinkButton name="Create" to="/create" />
+                  <NavBarLinkButton name="Dashboard" to="/dashboard" />
+                </React.Fragment>
+              ) : null
+            }
+            {
+              props.isDemo ? (
+                <React.Fragment>
+                  <NavBarLinkButton name="View All" to="/images" />
+                </React.Fragment>
+              ) : null
+            }
           </ul>
-          <ul className="navbar-nav ml-auto">
-            {!props.userLoggedIn && (
-              <li className="nav-item">
-                <NavLink
-                  exact
-                  to="/login"
-                  className="nav-link"
-                  activeClassName="nav-link active"
-                >
-                  Login
-                </NavLink>
-              </li>
-            )}
 
-            {props.userLoggedIn && (
-              <li className="nav-item">
-                <NavLink
-                  exact
-                  to="/login"
-                  className="nav-link"
-                  activeClassName="nav-link active"
-                  onClick={() => {
-                    props.logout();
-                  }}
-                >
-                  Logout
-                </NavLink>
-              </li>
-            )}
+          <ul className="navbar-nav ml-auto">
+            {(!props.userLoggedIn && !props.isDemo) ? <NavBarLinkButton name="Login" to="/login" /> : null}
+            {props.userLoggedIn && <NavBarLinkButton name="Logout" to="/login" onclickcallback={logOut} />}
           </ul>
         </div>
       </nav>
     </HashRouter>
+  );
+}
+
+const NavBarLinkButton = ({ name, to, onclickcallback = false }) => {
+  return (
+    <li className="nav-item">
+      <NavLink
+        exact
+        to={to}
+        className="nav-link"
+        activeClassName="nav-link active"
+        onClick={onclickcallback ? onclickcallback : null}
+      >
+        {name}
+      </NavLink>
+    </li>
   );
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
-import Analytics from "../Analytics";
-import PlusButton from "../PlusButton";
-import Pie from "../Pie";
+import Analytics from "../components/Analytics";
+import PlusButton from "../components/PlusButton";
+import Pie from "../components/Pie";
 function Home() {
   return (
     <div>

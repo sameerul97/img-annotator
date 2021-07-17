@@ -124,7 +124,7 @@ class Image
         // } else {
         //     $baseUrl = "http://localhost:8888/Project_2021/image-annotator/server/api/user_images/";
         // }
-
+        
         foreach ($results as $row) {
             array_push($myArray, (object)[
                 'id' => $row['id'],

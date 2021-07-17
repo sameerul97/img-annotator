@@ -10,7 +10,11 @@ services:
     volumes:
       - ./server:/var/www/html/
     environment:
-      ENVIRONMENT: local
+      ENVIRONMENT: docker
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: example
+      MYSQL_HOST: db
+      MYSQL_DBNAME: Img-annotator
 
   db:
     # image: mariadb

@@ -122,8 +122,8 @@
     border-radius: 3px;
     margin: 0 4px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center;
+    align-items: center; */
     cursor: pointer;
     background: #19a2b8;
     text-transform: capitalize;
@@ -140,9 +140,21 @@
     border-color: #10707f;
 }
 
-.public-DraftStyleDefault-ltr {
+.rdw-left-aligned-block {
+    text-align: left;
+}
+
+.rdw-right-aligned-block {
+    text-align: right;
+}
+
+/* .public-DraftStyleDefault-ltr {
     direction: ltr;
     text-align: unset;
+} */
+
+.public-DraftStyleDefault-ltr {
+    text-align: inherit !important;
 }
 
 .rdw-editor-toolbar {
@@ -152,7 +164,7 @@
 .public-DraftStyleDefault-block {
     margin: 1em 0;
     margin: .75em 0;
-    margin: 8px 0;
+    margin: 0px 0;
 }
 
 .buttonEditor .public-DraftStyleDefault-block {

@@ -2,29 +2,33 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
-import Home from "./components/pages/Home";
-import Allimages from "./components/pages/Allimages";
-import HotspotImage from "./components/Image";
+import Home from "./pages/Home";
+import Allimages from "./pages/Allimages";
+import HotspotImage from "./components/HotspotImage";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import PrivateRoute, { tokenValidation } from "./components/PrivateRoute";
-import NewImage from "./components/pages/NewImage";
+import NewImage from "./pages/NewImage";
+import Image from "./pages/Image";
 
 import NotFoundImage from "./assets/page_not_found.svg";
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [isDemo, setIsDemo] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      tokenValidation()
-        .then((res) => {
-          setUserLoggedIn(true);
-        })
-        .catch((err) => {
-          console.log(err);
-          setUserLoggedIn(false);
-        });
+    if (!isDemo) {
+      if (localStorage.getItem("token")) {
+        tokenValidation()
+          .then((res) => {
+            setUserLoggedIn(true);
+          })
+          .catch((err) => {
+            console.log(err);
+            setUserLoggedIn(false);
+          });
+      }
     }
   });
 
@@ -36,7 +40,7 @@ function App() {
   return (
     <React.Fragment>
       <Router>
-        <Navbar userLoggedIn={userLoggedIn} logout={logout} />
+        <Navbar userLoggedIn={userLoggedIn} isDemo={isDemo} logout={logout} />
         <Switch>
           <Route path="/" exact component={Home} />
           <PrivateRoute
@@ -49,7 +53,7 @@ function App() {
           <PrivateRoute
             path="/image/:id"
             exact
-            component={HotspotImage}
+            component={Image}
             setUserLoggedIn={setUserLoggedIn}
           ></PrivateRoute>
 

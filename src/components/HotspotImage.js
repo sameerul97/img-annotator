@@ -277,7 +277,8 @@ function HotspotImage(props) {
       });
   };
 
-  const { id } = props.match.params;
+  // const { id } = props.match.params;
+  const { id } = props.id;
 
   const fetchImage = useCallback(async () => {
     try {
@@ -555,59 +556,59 @@ function HotspotImage(props) {
     }
   }, [image, props]);
 
-  useEffect(() => {
-    const mockDb = JSON.parse(localStorage.getItem("mockDatabase"));
-    let newDbData = [];
+  // useEffect(() => {
+  //   const mockDb = JSON.parse(localStorage.getItem("mockDatabase"));
+  //   let newDbData = [];
 
-    for (var i in mockDb) {
-      if (mockDb[i].id === image.id) {
-        newDbData.push(image);
-      } else {
-        newDbData.push(mockDb[i]);
-      }
-    }
-  }, [image]);
+  //   for (var i in mockDb) {
+  //     if (mockDb[i].id === image.id) {
+  //       newDbData.push(image);
+  //     } else {
+  //       newDbData.push(mockDb[i]);
+  //     }
+  //   }
+  // }, [image]);
 
-  useEffect(() => {
-    const mockPopUpDb = JSON.parse(localStorage.getItem("mockPopUpDatabase"));
-    let newPopupDbData = [];
-    if (popups !== false) {
-      // finding all the popup which relates to this image
-      for (var i in mockPopUpDb) {
-        let popupFound = false;
-        for (var popup in popups) {
-          if (mockPopUpDb[i].id === popups[popup].id) {
-            popupFound = true;
-            break;
-          }
-        }
-        if (popupFound) {
-          newPopupDbData.push(popups[popup]);
-        } else {
-          newPopupDbData.push(mockPopUpDb[i]);
-        }
-      }
+  // useEffect(() => {
+  //   const mockPopUpDb = JSON.parse(localStorage.getItem("mockPopUpDatabase"));
+  //   let newPopupDbData = [];
+  //   if (popups !== false) {
+  //     // finding all the popup which relates to this image
+  //     for (var i in mockPopUpDb) {
+  //       let popupFound = false;
+  //       for (var popup in popups) {
+  //         if (mockPopUpDb[i].id === popups[popup].id) {
+  //           popupFound = true;
+  //           break;
+  //         }
+  //       }
+  //       if (popupFound) {
+  //         newPopupDbData.push(popups[popup]);
+  //       } else {
+  //         newPopupDbData.push(mockPopUpDb[i]);
+  //       }
+  //     }
 
-      // check if there is any new popup
-      for (var aPopup in popups) {
-        let newPopupFound = true;
-        for (var popupInMockDb in mockPopUpDb) {
-          if (mockPopUpDb[popupInMockDb].id === popups[aPopup].id) {
-            newPopupFound = false;
-          }
-        }
-        if (newPopupFound) {
-          newPopupDbData.push(popups[aPopup]);
-        }
-      }
-      if (popupToBeDeleted) {
-        newPopupDbData = newPopupDbData.filter((popup) => {
-          return parseInt(popup.id) !== parseInt(popupToBeDeleted.popupId);
-        });
-        setPopupToBeDeleted(false);
-      }
-    }
-  }, [popups, setPopups]);
+  //     // check if there is any new popup
+  //     for (var aPopup in popups) {
+  //       let newPopupFound = true;
+  //       for (var popupInMockDb in mockPopUpDb) {
+  //         if (mockPopUpDb[popupInMockDb].id === popups[aPopup].id) {
+  //           newPopupFound = false;
+  //         }
+  //       }
+  //       if (newPopupFound) {
+  //         newPopupDbData.push(popups[aPopup]);
+  //       }
+  //     }
+  //     if (popupToBeDeleted) {
+  //       newPopupDbData = newPopupDbData.filter((popup) => {
+  //         return parseInt(popup.id) !== parseInt(popupToBeDeleted.popupId);
+  //       });
+  //       setPopupToBeDeleted(false);
+  //     }
+  //   }
+  // }, [popups, setPopups]);
 
   const enablePopupView = (event) => {
     setPopupView(true);

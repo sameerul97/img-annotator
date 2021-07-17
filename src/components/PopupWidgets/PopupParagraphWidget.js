@@ -190,7 +190,7 @@ function PopupParagraphWidget(props) {
         toolbarClassName="bg-info"
         wrapperClassName="demo-wrapper"
         editorClassName="demo-editor-custom"
-        onEditorStateChange={onEditorStateChange}
+        
         toolbar={{
           options: ["inline", "textAlign"],
           inline: {
@@ -208,6 +208,7 @@ function PopupParagraphWidget(props) {
             options: ["left", "center", "right"],
           },
         }}
+        onEditorStateChange={onEditorStateChange}
       />
 
       {!readMode && <div className="py-2"></div>}

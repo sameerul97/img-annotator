@@ -1,7 +1,7 @@
 import React from "react";
 import ImageUploader from "react-images-upload";
 import Select from "react-select";
-import API from "../../api";
+import API from "../api";
 
 class NewImage extends React.Component {
   constructor(props) {
