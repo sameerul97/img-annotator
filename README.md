@@ -1,5 +1,6 @@
+![image-annotator](https://github.com/sameerul97/img-annotator/blob/master/app_showcase.gif?raw=true)
 # image-annotator
-Image Annotator lets you upload an image and place hotspot where each hotspot has popup which contains editable pre defined widgets. Image can embedded into websites (similar to how youtube lets you embed video into your personal site) [In Progress].
+Image Annotator lets you upload an image and place hotspot where each hotspot has popup which contains editable pre defined widgets. Image can embedded into websites (similar to how youtube lets you embed video into your personal site) [work in progress].
 
 ## How to run it locally
 Git Clone or download the project locally and run docker compose to spin up all the required services.
@@ -13,8 +14,9 @@ npm start and login into app using
 email: test@testuser.com
 password: test
 
-### TODO
-Let user generate an embeddable link
-Setup demo application
+## TODO
+- Let user generate an embeddable link
+- Introduce Redux
+- Setup demo application with minimal setup
 
 
