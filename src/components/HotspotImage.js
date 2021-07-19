@@ -14,6 +14,8 @@ import API from "../api";
 
 import { DragDropContext } from "react-beautiful-dnd";
 import { Widgets, Widget_ID } from "./Widgets";
+import { HashRouter, Link } from "react-router-dom";
+
 
 function HotspotImage(props) {
   const itemsRef = useRef([]);
@@ -479,10 +481,10 @@ function HotspotImage(props) {
     let effectActive = true;
 
     if (loaded) {
-      itemsRef.current = itemsRef.current.slice(
-        0,
-        image.marker_positions.length
-      );
+      // itemsRef.current = itemsRef.current.slice(
+      //   0,
+      //   image.marker_positions.length
+      // );
 
       // setting image width whether its portrait or landscape
       let newImage = new Image();
@@ -506,7 +508,7 @@ function HotspotImage(props) {
   }, [loaded, image, setPopups]);
 
   useEffect(() => {
-    setTimeout(() => Marker.positionMarkers(itemsRef), 100);
+    // setTimeout(() => Marker.positionMarkers(itemsRef), 100);
 
     if (image.id) {
       API.put(
@@ -1193,6 +1195,12 @@ function HotspotImage(props) {
     <React.Fragment>
       {loaded ? (
         <div className="container-fluid mt-4 ml-0" style={{ width: "95%" }}>
+
+          <HashRouter>
+            <Link to={`/embed/${image.id}`} target="_blank" rel="noopener noreferrer" >
+              EMBED PAGE
+            </Link>
+          </HashRouter>
           <div className="row text-center text-white mr-auto">
             <DragDropContext onDragEnd={onDragEnd}>
               <div
@@ -1201,9 +1209,8 @@ function HotspotImage(props) {
                 ref={widgetPanelRef}
               >
                 <div
-                  className={`text-left bg-info rounded-right px-0 smoothTransition h-100 ${
-                    selectedMarker || popupEditMode ? "col-md-12" : "col-md-4"
-                  }`}
+                  className={`text-left bg-info rounded-right px-0 smoothTransition h-100 ${selectedMarker || popupEditMode ? "col-md-12" : "col-md-4"
+                    }`}
                 >
                   <ColorPicker
                     onColorSelected={onColorSelected}
@@ -1256,9 +1263,8 @@ function HotspotImage(props) {
                     </div>
                   )}
                   <img
-                    className={`target rounded shadow ${
-                      loaded ? "" : "d-none"
-                    }`}
+                    className={`target rounded shadow ${loaded ? "" : "d-none"
+                      }`}
                     alt="empty"
                     src={image.url}
                     onLoad={() => setLoaded(true)}
@@ -1294,7 +1300,7 @@ function HotspotImage(props) {
                     {popups.map((data, index) => (
                       <React.Fragment key={index}>
                         {data.id ===
-                        parseInt(popupModeMarkerSelected.popupId) ? (
+                          parseInt(popupModeMarkerSelected.popupId) ? (
                           <React.Fragment>
                             <Popup
                               key={index}

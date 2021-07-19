@@ -34,7 +34,7 @@ function Navbar(props) {
             {
               props.userLoggedIn ? (
                 <React.Fragment>
-                  <NavBarLinkButton name="View All" to="/images" />
+                  <NavBarLinkButton name="View All" to="/image" />
                   <NavBarLinkButton name="Create" to="/create" />
                   <NavBarLinkButton name="Dashboard" to="/dashboard" />
                 </React.Fragment>

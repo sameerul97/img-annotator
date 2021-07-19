@@ -12,10 +12,13 @@ import NewImage from "./pages/NewImage";
 import Image from "./pages/Image";
 
 import NotFoundImage from "./assets/page_not_found.svg";
+import EmbedPage from "./pages/EmbedPage";
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isDemo, setIsDemo] = useState(false);
+
+  const [isEmbedPage, setIsEmbedPage] = useState(false);
 
   useEffect(() => {
     if (!isDemo) {
@@ -40,11 +43,11 @@ function App() {
   return (
     <React.Fragment>
       <Router>
-        <Navbar userLoggedIn={userLoggedIn} isDemo={isDemo} logout={logout} />
+        {!isEmbedPage && <Navbar userLoggedIn={userLoggedIn} isDemo={isDemo} logout={logout} />}
         <Switch>
           <Route path="/" exact component={Home} />
           <PrivateRoute
-            path="/images"
+            path="/image"
             exact
             component={Allimages}
             setUserLoggedIn={setUserLoggedIn}
@@ -56,7 +59,13 @@ function App() {
             component={Image}
             setUserLoggedIn={setUserLoggedIn}
           ></PrivateRoute>
+          <Route
+            path="/embed/:id"
+            exact
+            render={() => <EmbedPage setIsEmbedPage={setIsEmbedPage} />}
+          // setUserLoggedIn={setUserLoggedIn}
 
+          />
           <Route
             path="/login"
             render={(props) => <Login setUserLoggedIn={setUserLoggedIn} />}

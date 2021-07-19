@@ -28,7 +28,7 @@ const Marker = {
   },
 
   positionMarkers: function (itemsRef) {
-    // console.log(itemsRef);
+    console.log(itemsRef);
     var imageMetrics = Marker.getImageMetric(
       $(".imageMarker"),
       function (imageMetrics) {
