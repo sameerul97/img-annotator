@@ -16,7 +16,6 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { Widgets, Widget_ID } from "./Widgets";
 import { HashRouter, Link } from "react-router-dom";
 
-
 function HotspotImage(props) {
   const itemsRef = useRef([]);
   const editMarkerRef = useRef(false);
@@ -73,12 +72,12 @@ function HotspotImage(props) {
             return {
               ...marker,
               top: top,
-              left: left,
+              left: left
             };
           } else {
             return marker;
           }
-        }),
+        })
       };
     });
   }
@@ -87,13 +86,13 @@ function HotspotImage(props) {
     API.post(
       `/marker/`,
       {
-        image_id: parseInt(image.id),
+        image_id: parseInt(image.id)
       },
       {
         headers: {
           "content-type": "multipart/form-data",
-          Authorization: localStorage.getItem("token"),
-        },
+          Authorization: localStorage.getItem("token")
+        }
       }
     )
       .then((res) => {
@@ -112,13 +111,13 @@ function HotspotImage(props) {
           marker_image: new_marker.marker_image,
           background_color: new_marker.background_color,
           border_radius: new_marker.border_radius,
-          popup_id: parseInt(new_marker.id),
+          popup_id: parseInt(new_marker.id)
         };
 
         setImage((prevState) => {
           return {
             ...prevState,
-            marker_positions: [...prevState.marker_positions, temp_new_marker],
+            marker_positions: [...prevState.marker_positions, temp_new_marker]
           };
         });
 
@@ -129,7 +128,7 @@ function HotspotImage(props) {
             id: new_popup.popup_content[h].id,
             widget_type_id: new_popup.popup_content[h].widget_type_id,
             src: new_popup.popup_content[h].content,
-            marker_id: new_marker.id,
+            marker_id: new_marker.id
           });
         }
         new_popup["popup_content"] = temp_popup_contents;
@@ -156,33 +155,30 @@ function HotspotImage(props) {
     var xPos = parseInt(x[len - 2]);
     var yPos = parseInt(x[len - 1]);
 
-    var imageMetric = Marker.getImageMetric(
-      $(".imageMarker"),
-      function (imageMetric) {
-        var css_data_left, css_data_top;
+    Marker.getImageMetric($(".imageMarker"), function (imageMetric) {
+      var css_data_left, css_data_top;
 
-        if (xPos < 0) {
-          css_data_left = parseInt($(event.target).css("left")) + xPos;
-          css_data_top = parseInt($(event.target).css("top")) + yPos;
-        } else {
-          css_data_left = parseInt($(event.target).css("left")) + xPos;
-          css_data_top = parseInt($(event.target).css("top")) + yPos;
-        }
-
-        var data_left_multiplier = css_data_left / imageMetric.getWidthLess;
-        var natural_image_left = data_left_multiplier * imageMetric.width;
-        // console.log(css_data_left, data_left_multiplier, natural_image_left);
-
-        var data_right_multiplier = css_data_top / imageMetric.setHeight;
-        var natural_image_top = data_right_multiplier * imageMetric.height;
-
-        updateMarkerTopAndLeft(
-          event.target.getAttribute("data-key"),
-          natural_image_left,
-          natural_image_top
-        );
+      if (xPos < 0) {
+        css_data_left = parseInt($(event.target).css("left")) + xPos;
+        css_data_top = parseInt($(event.target).css("top")) + yPos;
+      } else {
+        css_data_left = parseInt($(event.target).css("left")) + xPos;
+        css_data_top = parseInt($(event.target).css("top")) + yPos;
       }
-    );
+
+      var data_left_multiplier = css_data_left / imageMetric.getWidthLess;
+      var natural_image_left = data_left_multiplier * imageMetric.width;
+      // console.log(css_data_left, data_left_multiplier, natural_image_left);
+
+      var data_right_multiplier = css_data_top / imageMetric.setHeight;
+      var natural_image_top = data_right_multiplier * imageMetric.height;
+
+      updateMarkerTopAndLeft(
+        event.target.getAttribute("data-key"),
+        natural_image_left,
+        natural_image_top
+      );
+    });
   }
 
   function dragMoveListener(event) {
@@ -208,12 +204,12 @@ function HotspotImage(props) {
           if (parseInt(marker.m_id) === parseInt(selectedMarker.markerId)) {
             return {
               ...marker,
-              color: color.hex,
+              color: color.hex
             };
           } else {
             return marker;
           }
-        }),
+        })
       };
     });
   };
@@ -222,11 +218,11 @@ function HotspotImage(props) {
     API.delete("/marker/", {
       data: {
         marker_id: parseInt(selectedMarker.markerId),
-        popup_id: parseInt(selectedMarker.popupId),
+        popup_id: parseInt(selectedMarker.popupId)
       },
       headers: {
-        Authorization: localStorage.getItem("token"),
-      },
+        Authorization: localStorage.getItem("token")
+      }
     })
       .then((res) => {
         /**
@@ -234,7 +230,7 @@ function HotspotImage(props) {
          * since its deleted on db */
         if (image.marker_positions.length > 1) {
           setPopupToBeDeleted({
-            popupId: parseInt(selectedMarker.popupId),
+            popupId: parseInt(selectedMarker.popupId)
           });
 
           setImage((prevState) => {
@@ -242,7 +238,7 @@ function HotspotImage(props) {
               ...prevState,
               marker_positions: prevState.marker_positions.filter(
                 (marker) => marker.m_id !== parseInt(selectedMarker.markerId)
-              ),
+              )
             };
           });
 
@@ -286,11 +282,11 @@ function HotspotImage(props) {
     try {
       var imageData = await await API.get(`/image/`, {
         params: {
-          image_id: parseInt(id),
+          image_id: parseInt(id)
         },
         headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+          Authorization: localStorage.getItem("token")
+        }
       });
 
       imageData = imageData.data;
@@ -335,12 +331,12 @@ function HotspotImage(props) {
               marker_image: imageData[j].marker_image,
               background_color: imageData[j].background_color,
               border_radius: imageData[j].border_radius,
-              popup_id: thisMarkerid,
+              popup_id: thisMarkerid
             };
 
             popupContent.push({
               id: thisMarkerid,
-              popup_content: [],
+              popup_content: []
             });
             break;
           }
@@ -365,7 +361,7 @@ function HotspotImage(props) {
               widget_type_id: imageData[h].widget_type_id,
               order_no: imageData[h].order_no,
               src: imageData[h].content,
-              marker_id: thisMarkerid,
+              marker_id: thisMarkerid
             });
           }
         }
@@ -410,10 +406,10 @@ function HotspotImage(props) {
         autoScroll: true,
         modifiers: [
           interact.modifiers.restrictRect({
-            restriction: "parent",
-          }),
+            restriction: "parent"
+          })
         ],
-        onmove: dragMoveListener,
+        onmove: dragMoveListener
       })
       .on("dragend", dragEndListener);
 
@@ -515,12 +511,12 @@ function HotspotImage(props) {
         `/marker/`,
         {
           image_id: parseInt(image.id),
-          markers: image,
+          markers: image
         },
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
-          },
+            Authorization: localStorage.getItem("token")
+          }
         }
       )
         .then((res) => {
@@ -642,8 +638,8 @@ function HotspotImage(props) {
       API.post(`/popup_widget/update_image.php`, formData, {
         headers: {
           "content-type": "multipart/form-data",
-          Authorization: localStorage.getItem("token"),
-        },
+          Authorization: localStorage.getItem("token")
+        }
       })
         .then((res) => {
           setPopups((prevState) => {
@@ -658,13 +654,13 @@ function HotspotImage(props) {
                       if (popup_content_widget.id === popup_widget_id) {
                         return {
                           ...popup_content_widget,
-                          src: res.data,
+                          src: res.data
                         };
                       } else {
                         return popup_content_widget;
                       }
                     }
-                  ),
+                  )
                 };
               } else {
                 return popup;
@@ -708,13 +704,13 @@ function HotspotImage(props) {
           marker_id: parseInt(popupModeMarkerSelected.markerId),
           popup_widget_id: popup_widget_id,
           content: content,
-          widget_type_id: widget_type_id,
+          widget_type_id: widget_type_id
         },
         {
           headers: {
             "content-type": "multipart/form-data",
-            Authorization: localStorage.getItem("token"),
-          },
+            Authorization: localStorage.getItem("token")
+          }
         }
       )
         .then((res) => {
@@ -762,13 +758,13 @@ function HotspotImage(props) {
                 if (popup_content_widget.id === popup_widget_id) {
                   return {
                     ...popup_content_widget,
-                    src: content,
+                    src: content
                   };
                 } else {
                   return popup_content_widget;
                 }
               }
-            ),
+            )
           };
         } else {
           return popup;
@@ -790,8 +786,8 @@ function HotspotImage(props) {
         params: {
           popup_widget_id: parseInt(popup_widget_id),
           marker_id: parseInt(parseInt(popupModeMarkerSelected.markerId)),
-          imageSlide: isImageSlide,
-        },
+          imageSlide: isImageSlide
+        }
       });
 
       setPopups((prevState) => {
@@ -806,13 +802,13 @@ function HotspotImage(props) {
                   if (popup_content_widget.id === popup_widget_id) {
                     return {
                       ...popup_content_widget,
-                      src: JSON.stringify(slideCreated.data),
+                      src: JSON.stringify(slideCreated.data)
                     };
                   } else {
                     return popup_content_widget;
                   }
                 }
-              ),
+              )
             };
           } else {
             return popup;
@@ -862,8 +858,8 @@ function HotspotImage(props) {
         {
           headers: {
             "content-type": "multipart/form-data",
-            Authorization: localStorage.getItem("token"),
-          },
+            Authorization: localStorage.getItem("token")
+          }
         }
       );
 
@@ -883,13 +879,13 @@ function HotspotImage(props) {
                   if (popup_content_widget.id === popup_widget_id) {
                     return {
                       ...popup_content_widget,
-                      src: JSON.stringify(ordered_carousel_slides),
+                      src: JSON.stringify(ordered_carousel_slides)
                     };
                   } else {
                     return popup_content_widget;
                   }
                 }
-              ),
+              )
             };
           } else {
             return popup;
@@ -924,8 +920,8 @@ function HotspotImage(props) {
         data: {
           popup_widget_id: parseInt(popup_widget_id),
           marker_id: parseInt(parseInt(popupModeMarkerSelected.markerId)),
-          slide_id: slide_id,
-        },
+          slide_id: slide_id
+        }
       });
 
       setPopups((prevState) => {
@@ -940,13 +936,13 @@ function HotspotImage(props) {
                   if (popup_content_widget.id === popup_widget_id) {
                     return {
                       ...popup_content_widget,
-                      src: JSON.stringify(slideCreated.data),
+                      src: JSON.stringify(slideCreated.data)
                     };
                   } else {
                     return popup_content_widget;
                   }
                 }
-              ),
+              )
             };
           } else {
             return popup;
@@ -973,13 +969,13 @@ function HotspotImage(props) {
         marker_id: parseInt(popupModeMarkerSelected.markerId),
         popup_widget_id: popup_widget_id,
         content: content,
-        widget_type_id: widget_type_id,
+        widget_type_id: widget_type_id
       },
       {
         headers: {
           "content-type": "multipart/form-data",
-          Authorization: localStorage.getItem("token"),
-        },
+          Authorization: localStorage.getItem("token")
+        }
       }
     );
 
@@ -1001,13 +997,13 @@ function HotspotImage(props) {
                 if (popup_content_widget.id === popup_widget_id) {
                   return {
                     ...popup_content_widget,
-                    src: JSON.stringify(ordered_carousel_slides),
+                    src: JSON.stringify(ordered_carousel_slides)
                   };
                 } else {
                   return popup_content_widget;
                 }
               }
-            ),
+            )
           };
         } else {
           return popup;
@@ -1045,7 +1041,7 @@ function HotspotImage(props) {
       id: draggedEl.id + "_" + widget_uid(),
       widget_type_id: draggedEl.id,
       src: null,
-      marker_id: popupModeMarkerSelected.markerid,
+      marker_id: popupModeMarkerSelected.markerid
     };
 
     destClone.splice(droppableDestination.index, 0, draggedEl);
@@ -1062,12 +1058,12 @@ function HotspotImage(props) {
         image_id: parseInt(image.id),
         marker_id: parseInt(popupModeMarkerSelected.markerId),
         widget_type_id: draggedEl.widget_type_id,
-        react_widget_id: draggedEl.id,
+        react_widget_id: draggedEl.id
       },
       {
         headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+          Authorization: localStorage.getItem("token")
+        }
       }
     )
       .then((res) => {
@@ -1088,13 +1084,13 @@ function HotspotImage(props) {
                         id: new_id,
                         widget_type_id: res.data.widget_type_id,
                         src: res.data.src,
-                        marker_id: popupModeMarkerSelected.markerId,
+                        marker_id: popupModeMarkerSelected.markerId
                       };
                     } else {
                       return content;
                     }
                   }
-                ),
+                )
               };
             } else {
               return popup;
@@ -1146,7 +1142,7 @@ function HotspotImage(props) {
                 popup.popup_content,
                 source.index,
                 destination.index
-              ),
+              )
             };
           } else {
             return popup;
@@ -1172,7 +1168,7 @@ function HotspotImage(props) {
                 draggableId,
                 source,
                 destination
-              ).droppable2,
+              ).droppable2
             };
           } else {
             return popup;
@@ -1195,9 +1191,12 @@ function HotspotImage(props) {
     <React.Fragment>
       {loaded ? (
         <div className="container-fluid mt-4 ml-0" style={{ width: "95%" }}>
-
           <HashRouter>
-            <Link to={`/embed/${image.id}`} target="_blank" rel="noopener noreferrer" >
+            <Link
+              to={`/embed/${image.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               EMBED PAGE
             </Link>
           </HashRouter>
@@ -1209,8 +1208,9 @@ function HotspotImage(props) {
                 ref={widgetPanelRef}
               >
                 <div
-                  className={`text-left bg-info rounded-right px-0 smoothTransition h-100 ${selectedMarker || popupEditMode ? "col-md-12" : "col-md-4"
-                    }`}
+                  className={`text-left bg-info rounded-right px-0 smoothTransition h-100 ${
+                    selectedMarker || popupEditMode ? "col-md-12" : "col-md-4"
+                  }`}
                 >
                   <ColorPicker
                     onColorSelected={onColorSelected}
@@ -1263,8 +1263,9 @@ function HotspotImage(props) {
                     </div>
                   )}
                   <img
-                    className={`target rounded shadow ${loaded ? "" : "d-none"
-                      }`}
+                    className={`target rounded shadow ${
+                      loaded ? "" : "d-none"
+                    }`}
                     alt="empty"
                     src={image.url}
                     onLoad={() => setLoaded(true)}
@@ -1300,7 +1301,7 @@ function HotspotImage(props) {
                     {popups.map((data, index) => (
                       <React.Fragment key={index}>
                         {data.id ===
-                          parseInt(popupModeMarkerSelected.popupId) ? (
+                        parseInt(popupModeMarkerSelected.popupId) ? (
                           <React.Fragment>
                             <Popup
                               key={index}
@@ -1313,7 +1314,7 @@ function HotspotImage(props) {
                               }
                               positions={{
                                 top: image.marker_positions[index].top,
-                                left: image.marker_positions[index].left,
+                                left: image.marker_positions[index].left
                               }}
                               newWidgetBeingAdded={newWidgetBeingAdded}
                               addASlideInCarousel={addASlideInCarousel}
