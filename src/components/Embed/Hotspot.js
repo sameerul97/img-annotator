@@ -38,9 +38,6 @@ const Hotspot = React.forwardRef((props, ref) => {
           }}
           className="toggle"
         >
-          {/* {`#popup` + props.markers.popup_id}
-            {`#popup` + props.markers.top}
-            {`#popup` + props.markers.left} */}
         </a>
       </div>
     </div>

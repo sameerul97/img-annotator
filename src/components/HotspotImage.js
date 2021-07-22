@@ -3,6 +3,7 @@ import $ from "jquery";
 import "../Marker.css";
 import Marker from "../lib/Marker";
 import interact from "interactjs";
+import { ParseData } from "../utils/ParseImageData";
 
 import Markers from "./Marker";
 import Popup from "./Popup";
@@ -14,7 +15,7 @@ import API from "../api";
 
 import { DragDropContext } from "react-beautiful-dnd";
 import { Widgets, Widget_ID } from "./Widgets";
-import { HashRouter, Link } from "react-router-dom";
+import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
 
 function HotspotImage(props) {
   const itemsRef = useRef([]);
@@ -62,6 +63,16 @@ function HotspotImage(props) {
 
   // if image is portrait
   const [isPortrait, setIsPortrait] = useState(false);
+
+  const [
+    imageRef,
+    imageLoaded,
+    onLoad,
+    naturalImageHeight,
+    naturalImageWidth,
+    imageWidth,
+    imageHeight
+  ] = useGetImageNaturalData();
 
   function updateMarkerTopAndLeft(marker_index, left, top) {
     setImage((prevState) => {
@@ -215,20 +226,21 @@ function HotspotImage(props) {
   };
 
   const deleteMarker = (event) => {
-    API.delete("/marker/", {
-      data: {
-        marker_id: parseInt(selectedMarker.markerId),
-        popup_id: parseInt(selectedMarker.popupId)
-      },
-      headers: {
-        Authorization: localStorage.getItem("token")
-      }
-    })
-      .then((res) => {
-        /**
-         * Delete marker and its popup in client side.
-         * since its deleted on db */
-        if (image.marker_positions.length > 1) {
+    if (image.marker_positions.length > 1) {
+      API.delete("/marker/", {
+        data: {
+          marker_id: parseInt(selectedMarker.markerId),
+          popup_id: parseInt(selectedMarker.popupId)
+        },
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      })
+        .then((res) => {
+          /**
+           * Delete marker and its popup in client side.
+           * once its deleted on db */
+
           setPopupToBeDeleted({
             popupId: parseInt(selectedMarker.popupId)
           });
@@ -249,30 +261,32 @@ function HotspotImage(props) {
           });
 
           setSelectedMarker(false);
-        }
-      })
-      .catch((err) => {
-        let error = err.response.data;
-        let errorResponse = err.response;
+        })
+        .catch((err) => {
+          let error = err.response.data;
+          let errorResponse = err.response;
 
-        if (error.message === "Expired token") {
-          props.history.push(`/login/`);
-        }
+          if (error.message === "Expired token") {
+            props.history.push(`/login/`);
+          }
 
-        if (errorResponse.status === 401) {
-          setError(error.error);
-          setErrorMessage(error.message);
-        }
+          if (errorResponse.status === 401) {
+            setError(error.error);
+            setErrorMessage(error.message);
+          }
 
-        if (errorResponse.status === 400) {
-          if (error.validationError) {
-            if (Object.keys(error.message)[0] === "marker_id") {
-              setError(error.error);
-              setErrorMessage(error.message[Object.keys(error.message)[0]][0]);
+          if (errorResponse.status === 400) {
+            if (error.validationError) {
+              if (Object.keys(error.message)[0] === "marker_id") {
+                setError(error.error);
+                setErrorMessage(
+                  error.message[Object.keys(error.message)[0]][0]
+                );
+              }
             }
           }
-        }
-      });
+        });
+    }
   };
 
   // const { id } = props.match.params;
@@ -280,7 +294,7 @@ function HotspotImage(props) {
 
   const fetchImage = useCallback(async () => {
     try {
-      var imageData = await await API.get(`/image/`, {
+      var res = await await API.get(`/image/`, {
         params: {
           image_id: parseInt(id)
         },
@@ -289,94 +303,7 @@ function HotspotImage(props) {
         }
       });
 
-      imageData = imageData.data;
-
-      var fetchedImage = {},
-        popupContent = [];
-
-      fetchedImage["url"] = imageData[0]["url"];
-      fetchedImage["name"] = imageData[0]["name"];
-      fetchedImage["id"] = imageData[0]["Image_Id"];
-      fetchedImage["marker_positions"] = [];
-
-      var temp_markers = [];
-      for (var i in imageData) {
-        var thisMarkerid = parseInt(imageData[i].Marker_id);
-        var markerFound = false;
-
-        for (var j in temp_markers) {
-          if (parseInt(temp_markers[j]) === thisMarkerid) {
-            markerFound = true;
-            break;
-          }
-        }
-
-        if (!markerFound) {
-          temp_markers.push(thisMarkerid);
-        }
-      }
-
-      for (let i in temp_markers) {
-        let thisMarkerid = parseInt(temp_markers[i]);
-
-        for (var j in imageData) {
-          if (parseInt(imageData[j].Marker_id) === thisMarkerid) {
-            fetchedImage["marker_positions"][i] = {
-              m_id: thisMarkerid,
-              top: parseFloat(imageData[j].markerTop),
-              left: parseFloat(imageData[j].markerLeft),
-              color: imageData[j].color,
-              animation_type: imageData[j].animation_type,
-              marker_type: imageData[j].marker_type,
-              marker_image: imageData[j].marker_image,
-              background_color: imageData[j].background_color,
-              border_radius: imageData[j].border_radius,
-              popup_id: thisMarkerid
-            };
-
-            popupContent.push({
-              id: thisMarkerid,
-              popup_content: []
-            });
-            break;
-          }
-        }
-
-        var temp_popup_contents = [];
-
-        for (var h in imageData) {
-          if (parseInt(imageData[h].Markers_id) === thisMarkerid) {
-            /* TODO: Add carousel slide order */
-
-            if (imageData[h].widget_type_id === Widget_ID.CarouselWidget) {
-              console.log(JSON.parse(imageData[h].content));
-              let temp_carousel_content = JSON.parse(imageData[h].content);
-              imageData[h].content = JSON.stringify(
-                temp_carousel_content.sort((a, b) => a.order_no - b.order_no)
-              );
-            }
-
-            temp_popup_contents.push({
-              id: imageData[h].Popup_Contents_id,
-              widget_type_id: imageData[h].widget_type_id,
-              order_no: imageData[h].order_no,
-              src: imageData[h].content,
-              marker_id: thisMarkerid
-            });
-          }
-        }
-
-        popupContent[i]["popup_content"] = temp_popup_contents;
-      }
-
-      // Sorting popup contents by order_no
-      for (var k in popupContent) {
-        let content = popupContent[k].popup_content;
-        // console.log(content);
-        popupContent[k].popup_content = content.sort(function (a, b) {
-          return parseInt(a.order_no) - parseInt(b.order_no);
-        });
-      }
+      const [fetchedImage, popupContent] = ParseData(res.data);
 
       setPopups(popupContent);
       setImage(fetchedImage);
@@ -504,8 +431,6 @@ function HotspotImage(props) {
   }, [loaded, image, setPopups]);
 
   useEffect(() => {
-    // setTimeout(() => Marker.positionMarkers(itemsRef), 100);
-
     if (image.id) {
       API.put(
         `/marker/`,
@@ -522,6 +447,9 @@ function HotspotImage(props) {
         .then((res) => {
           setError(false);
           setErrorMessage(null);
+
+          // TODO: Manage the hotspot marker position state via react
+          Marker.positionMarkers(itemsRef);
         })
         .catch((err) => {
           let errorResponse = err.response;
@@ -553,60 +481,6 @@ function HotspotImage(props) {
         });
     }
   }, [image, props]);
-
-  // useEffect(() => {
-  //   const mockDb = JSON.parse(localStorage.getItem("mockDatabase"));
-  //   let newDbData = [];
-
-  //   for (var i in mockDb) {
-  //     if (mockDb[i].id === image.id) {
-  //       newDbData.push(image);
-  //     } else {
-  //       newDbData.push(mockDb[i]);
-  //     }
-  //   }
-  // }, [image]);
-
-  // useEffect(() => {
-  //   const mockPopUpDb = JSON.parse(localStorage.getItem("mockPopUpDatabase"));
-  //   let newPopupDbData = [];
-  //   if (popups !== false) {
-  //     // finding all the popup which relates to this image
-  //     for (var i in mockPopUpDb) {
-  //       let popupFound = false;
-  //       for (var popup in popups) {
-  //         if (mockPopUpDb[i].id === popups[popup].id) {
-  //           popupFound = true;
-  //           break;
-  //         }
-  //       }
-  //       if (popupFound) {
-  //         newPopupDbData.push(popups[popup]);
-  //       } else {
-  //         newPopupDbData.push(mockPopUpDb[i]);
-  //       }
-  //     }
-
-  //     // check if there is any new popup
-  //     for (var aPopup in popups) {
-  //       let newPopupFound = true;
-  //       for (var popupInMockDb in mockPopUpDb) {
-  //         if (mockPopUpDb[popupInMockDb].id === popups[aPopup].id) {
-  //           newPopupFound = false;
-  //         }
-  //       }
-  //       if (newPopupFound) {
-  //         newPopupDbData.push(popups[aPopup]);
-  //       }
-  //     }
-  //     if (popupToBeDeleted) {
-  //       newPopupDbData = newPopupDbData.filter((popup) => {
-  //         return parseInt(popup.id) !== parseInt(popupToBeDeleted.popupId);
-  //       });
-  //       setPopupToBeDeleted(false);
-  //     }
-  //   }
-  // }, [popups, setPopups]);
 
   const enablePopupView = (event) => {
     setPopupView(true);
@@ -642,6 +516,8 @@ function HotspotImage(props) {
         }
       })
         .then((res) => {
+          // TODO: Abstract away setPopups into function called updatePopups and
+          // call updatePopups once API response back
           setPopups((prevState) => {
             return prevState.map((popup, index) => {
               if (
@@ -748,6 +624,8 @@ function HotspotImage(props) {
         });
     }
 
+    // TODO: Abstract away setPopups into function called updatePopups and
+    // call updatePopups once API response back
     setPopups((prevState) => {
       return prevState.map((popup, index) => {
         if (parseInt(popup.id) === parseInt(popupModeMarkerSelected.popupId)) {
@@ -790,6 +668,8 @@ function HotspotImage(props) {
         }
       });
 
+      // TODO: Abstract away setPopups into function called updatePopups and
+      // call updatePopups once API response back
       setPopups((prevState) => {
         return prevState.map((popup, index) => {
           if (
@@ -867,6 +747,8 @@ function HotspotImage(props) {
         return a.order_no - b.order_no;
       });
 
+      // TODO: Abstract away setPopups into function called updatePopups and
+      // call updatePopups once API response back
       setPopups((prevState) => {
         return prevState.map((popup, index) => {
           if (
@@ -924,6 +806,8 @@ function HotspotImage(props) {
         }
       });
 
+      // TODO: Abstract away setPopups into function called updatePopups and
+      // call updatePopups once API response back
       setPopups((prevState) => {
         return prevState.map((popup, index) => {
           if (
@@ -987,6 +871,8 @@ function HotspotImage(props) {
       return a.order_no - b.order_no;
     });
 
+    // TODO: Abstract away setPopups into function called updatePopups and
+    // call updatePopups once API response back
     setPopups((prevState) => {
       return prevState.map((popup, index) => {
         if (parseInt(popup.id) === parseInt(popupModeMarkerSelected.popupId)) {
@@ -1012,7 +898,7 @@ function HotspotImage(props) {
     });
   };
 
-  // TODO: Move these utils f()s DragAndDropUtil.js once drag end implemented
+  // TODO: Move these utils f()s DragAndDropUtil.js
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -1035,7 +921,9 @@ function HotspotImage(props) {
   ) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
-    var draggedEl = sourceClone.find((el) => el.id === draggableId);
+    const result = {};
+
+    let draggedEl = sourceClone.find((el) => el.id === draggableId);
 
     draggedEl = {
       id: draggedEl.id + "_" + widget_uid(),
@@ -1045,11 +933,10 @@ function HotspotImage(props) {
     };
 
     destClone.splice(droppableDestination.index, 0, draggedEl);
-    console.log(draggedEl);
 
-    const result = {};
     result[droppableSource.droppableId] = sourceClone;
     result[droppableDestination.droppableId] = destClone;
+
     setNewWidgetBeingAdded(true);
 
     API.post(
@@ -1070,6 +957,8 @@ function HotspotImage(props) {
         let new_id = res.data.new_widget_id;
         let temp_react_widget_id = res.data.react_widget_id;
 
+        // TODO: Abstract away setPopups into function called updatePopups and
+        // call updatePopups once API response back
         setPopups(function (prevState) {
           return prevState.map((popup, index) => {
             if (
@@ -1097,6 +986,7 @@ function HotspotImage(props) {
             }
           });
         });
+
         setNewWidgetBeingAdded(false);
       })
       .catch((err) => {
@@ -1182,7 +1072,6 @@ function HotspotImage(props) {
     for (var i in popups) {
       for (var j in popups[i].popup_content) {
         popups[i].popup_content[i].order_no = j;
-        console.log(popups[i].popup_content[i].popup_content);
       }
     }
   };
@@ -1190,16 +1079,7 @@ function HotspotImage(props) {
   return (
     <React.Fragment>
       {loaded ? (
-        <div className="container-fluid mt-4 ml-0" style={{ width: "95%" }}>
-          <HashRouter>
-            <Link
-              to={`/embed/${image.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              EMBED PAGE
-            </Link>
-          </HashRouter>
+        <HotspotImageContainer>
           <div className="row text-center text-white mr-auto">
             <DragDropContext onDragEnd={onDragEnd}>
               <div
@@ -1216,7 +1096,7 @@ function HotspotImage(props) {
                     onColorSelected={onColorSelected}
                     selectedMarker={selectedMarker}
                     popupViewEnabled={popupView}
-                  ></ColorPicker>
+                  />
 
                   {popupEditMode && (
                     <PopupWidgets newWidgetBeingAdded={newWidgetBeingAdded} />
@@ -1244,6 +1124,7 @@ function HotspotImage(props) {
                   enableDraggableMode={enableDraggableMode}
                   popupEditMode={popupEditMode}
                   saveData={saveData}
+                  imageId={image.id}
                 />
                 <div
                   className="imageMarker shadow-lg"
@@ -1270,7 +1151,7 @@ function HotspotImage(props) {
                     src={image.url}
                     onLoad={() => setLoaded(true)}
                   />
-                  <div className="points_wrap">
+                  <HotspotWrap>
                     <div
                       className="image-overlay-onpopup rounded"
                       style={
@@ -1295,7 +1176,7 @@ function HotspotImage(props) {
                         />
                       </React.Fragment>
                     ))}
-                  </div>
+                  </HotspotWrap>
 
                   <React.Fragment>
                     {popups.map((data, index) => (
@@ -1333,7 +1214,7 @@ function HotspotImage(props) {
               </div>
             </DragDropContext>
           </div>
-        </div>
+        </HotspotImageContainer>
       ) : (
         <React.Fragment>
           {!imageNotFoundError && (
@@ -1357,3 +1238,13 @@ function HotspotImage(props) {
 }
 
 export default HotspotImage;
+
+const HotspotImageContainer = ({ children }) => (
+  <div className="container-fluid mt-4 ml-0" style={{ width: "95%" }}>
+    {children}
+  </div>
+);
+
+const HotspotWrap = ({ children }) => (
+  <div className="points_wrap">{children}</div>
+);
