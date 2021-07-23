@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { HashRouter, Link } from "react-router-dom";
-import { HeaderWidget, ImageWidget, ButtonWidget } from "./Widgets";
-import { VideoWidget, Widget_ID } from "./Widgets";
 import API from "../api";
 
 function AnImage({ img, index }) {
@@ -9,7 +7,7 @@ function AnImage({ img, index }) {
   return (
     <div
       style={{
-        position: "relative",
+        position: "relative"
       }}
     >
       {imageLoaded ? null : (
@@ -32,7 +30,7 @@ function AnImage({ img, index }) {
           width: "100%",
           borderTopRightRadius: " 2px",
           color: "black",
-          marginTop: "5px",
+          marginTop: "5px"
         }}
       >
         <p
@@ -48,16 +46,7 @@ function AnImage({ img, index }) {
 
 function Images() {
   const [error, setError] = useState(false);
-  const [images, setImages] = useState([
-    {
-      id: 2,
-      url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-    },
-    {
-      id: 3,
-      url: "https://images.unsplash.com/photo-1441984536979-3513fd89f0d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80",
-    },
-  ]);
+  const [images, setImages] = useState([]);
 
   const handleScrollPosition = () => {
     const scrollPosition = localStorage.getItem("scrollPosition");
@@ -74,11 +63,11 @@ function Images() {
 
   useEffect(() => {
     const fetchAllImage = async () => {
-      var allImages = await await API.get(`/allimages/`, {
+      const allImages = await API.get(`/allimages/`, {
         params: {},
         headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+          Authorization: localStorage.getItem("token")
+        }
       });
 
       return allImages;
@@ -95,13 +84,6 @@ function Images() {
         setError(true);
       });
   }, []);
-
-  const [widgets, setWidgets] = useState([
-    { id: "widget_id_1", widgetId: 0, widget: <HeaderWidget /> },
-    { id: "widget_id_2", widgetId: 1, widget: <ImageWidget /> },
-    { id: "widget_id_3", widgetId: 2, widget: <VideoWidget /> },
-    { id: "widget_id_4", widgetId: 3, widget: <ButtonWidget /> },
-  ]);
 
   return (
     <div className="container my-5 ">

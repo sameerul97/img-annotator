@@ -65,35 +65,46 @@ function EmbedPage(props) {
     imageHeight
   ] = useGetImageNaturalData();
 
+  let EmbedImage = <EmbedLoading />;
+
+  if (loaded) {
+    EmbedImage = (
+      <React.Fragment>
+        <img
+          ref={imageRef}
+          onLoad={onLoad}
+          src={image.url}
+          alt={image.url}
+          className="target rounded img-fluid w-100 shadow"
+        />
+        {!imageLoaded && <EmbedLoading />}
+      </React.Fragment>
+    );
+  }
+
+  const Hotspots = (
+    <React.Fragment>
+      {imageLoaded && (
+        <HotspotWrap>
+          {image.marker_positions.map((image_position, index) => (
+            <Hotspot
+              ref={(el) => (itemsRef.current[index] = el)}
+              key={index}
+              markers={image_position}
+              width={imageWidth / naturalImageWidth}
+            />
+          ))}
+        </HotspotWrap>
+      )}
+    </React.Fragment>
+  );
+
   return (
     <React.Fragment>
-      {loaded ? (
-        <div className="container px-0 text-center imageMarker">
-          <img
-            ref={imageRef}
-            onLoad={onLoad}
-            src={image.url}
-            alt={image.url}
-            className="target rounded img-fluid w-100 shadow"
-          />
-          {imageLoaded && (
-            <HotspotWrap>
-              {image.marker_positions.map((image_position, index) => (
-                <React.Fragment key={index}>
-                  <Hotspot
-                    ref={(el) => (itemsRef.current[index] = el)}
-                    key={index}
-                    markers={image_position}
-                    width={imageWidth / naturalImageWidth}
-                  />
-                </React.Fragment>
-              ))}
-            </HotspotWrap>
-          )}
-        </div>
-      ) : (
-        <p>Loading</p>
-      )}
+      <EmbedPageContainer>
+        {EmbedImage}
+        {Hotspots}
+      </EmbedPageContainer>
     </React.Fragment>
   );
 }
@@ -102,4 +113,15 @@ export default EmbedPage;
 
 const HotspotWrap = ({ children }) => (
   <div className="points_wrap">{children}</div>
+);
+
+const EmbedPageContainer = ({ children }) => (
+  <div className="container px-0 text-center imageMarker">{children}</div>
+);
+
+const EmbedLoading = () => (
+  <div
+    className="text-center w-100 d-flex shine"
+    style={{ minHeight: "780px" }}
+  />
 );
