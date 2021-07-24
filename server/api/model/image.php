@@ -17,10 +17,8 @@ class Image
 
     public function __construct()
     {
-        $database = new Database();
         $appUrl = new App_Url();
-        $db = $database->getConnection();
-
+        $db = DB::getInstance();
         $this->conn = $db;
         $this->baseUrl = $appUrl->getAppUrl();
 
@@ -124,7 +122,7 @@ class Image
         // } else {
         //     $baseUrl = "http://localhost:8888/Project_2021/image-annotator/server/api/user_images/";
         // }
-        
+
         foreach ($results as $row) {
             array_push($myArray, (object)[
                 'id' => $row['id'],

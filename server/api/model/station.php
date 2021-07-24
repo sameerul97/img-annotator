@@ -9,8 +9,7 @@ class Station
 
     public function __construct()
     {
-        $database = new Database();
-        $db = $database->getConnection();
+        $db = DB::getInstance();
         $this->conn = $db;
     }
 

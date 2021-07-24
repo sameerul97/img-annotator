@@ -13,10 +13,8 @@ class PopupWidget
 
     public function __construct()
     {
-        $database = new Database();
         $appUrl = new App_Url();
-        $db = $database->getConnection();
-
+        $db = DB::getInstance();
         $this->conn = $db;
         $this->baseUrl = $appUrl->getAppUrl();
         $this->popup_image_base_url = $appUrl->getPopupImageBaseUrl();
@@ -63,8 +61,6 @@ class PopupWidget
         $react_widget_id = $data->react_widget_id;
         $content = getContent($widget_type_id);
         $order_no = 2;
-
-
 
         $popupContentQuery = "INSERT INTO " . $this->table_name . "
             SET

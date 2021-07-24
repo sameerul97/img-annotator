@@ -38,8 +38,7 @@ class LoginController extends User
             $this->email = $data->email;
             $this->password = $data->password;
             $this->u_password = $data->password;
-            $database = new Database();
-            $db = $database->getConnection();
+            $db = DB::getInstance();
             parent::__construct($db);
         } else {
             throw new Exception(serialize($v->errors()));

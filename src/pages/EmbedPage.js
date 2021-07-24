@@ -9,51 +9,54 @@ import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
 function EmbedPage(props) {
   const [loaded, setLoaded] = useState(false);
   const [image, setImage] = useState({});
+  const [markers, setMarkers] = useState([]);
+  const [popups, setPopups] = useState([]);
   const itemsRef = useRef([]);
 
   const { id } = useParams();
-
-  const fetchImage = useCallback(async () => {
-    try {
-      const res = await await API.get(`/image/`, {
-        params: {
-          image_id: parseInt(id)
-        },
-        headers: {
-          Authorization: localStorage.getItem("token")
-        }
-      });
-
-      const [fetchedImage, popupContent] = ParseData(res.data);
-
-      // setPopups(popupContent);
-      setImage(fetchedImage);
-      setLoaded(true);
-    } catch (error) {
-      let errorResponse = error.response;
-
-      if (errorResponse.data.message === "Expired token") {
-        props.history.push(`/login/`);
-      }
-
-      if (errorResponse.status === 404) {
-        // setImageNotFoundError(true);
-        // setImageNotFoundErrorMessage(errorResponse.data.message);
-      }
-    }
-
-    return;
-  }, []);
 
   useEffect(() => {
     props.setIsEmbedPage(true);
   }, []);
 
   useEffect(() => {
-    (async () => {
-      await fetchImage();
-    })();
-  }, [fetchImage]);
+    const fetchImage = async () => {
+      try {
+        const res = await API.get(`/image/`, {
+          params: {
+            image_id: parseInt(id)
+          },
+          headers: {
+            Authorization: localStorage.getItem("token")
+          }
+        });
+
+        const [fetchedImage, popupContent] = ParseData(res.data);
+        console.log(popupContent);
+
+        setImage(fetchedImage);
+        setMarkers(fetchedImage.marker_positions);
+        setPopups(popupContent);
+
+        setLoaded(true);
+      } catch (error) {
+        let errorResponse = error.response;
+
+        if (errorResponse.data.message === "Expired token") {
+          props.history.push(`/login/`);
+        }
+
+        if (errorResponse.status === 404) {
+          // setImageNotFoundError(true);
+          // setImageNotFoundErrorMessage(errorResponse.data.message);
+        }
+      }
+
+      return;
+    };
+
+    fetchImage();
+  }, [id, props.history]);
 
   const [
     imageRef,
@@ -70,6 +73,7 @@ function EmbedPage(props) {
   if (loaded) {
     EmbedImage = (
       <React.Fragment>
+        {!imageLoaded && <EmbedLoading />}
         <img
           ref={imageRef}
           onLoad={onLoad}
@@ -77,7 +81,6 @@ function EmbedPage(props) {
           alt={image.url}
           className="target rounded img-fluid w-100 shadow"
         />
-        {!imageLoaded && <EmbedLoading />}
       </React.Fragment>
     );
   }
@@ -86,7 +89,7 @@ function EmbedPage(props) {
     <React.Fragment>
       {imageLoaded && (
         <HotspotWrap>
-          {image.marker_positions.map((image_position, index) => (
+          {markers.map((image_position, index) => (
             <Hotspot
               ref={(el) => (itemsRef.current[index] = el)}
               key={index}
@@ -99,11 +102,27 @@ function EmbedPage(props) {
     </React.Fragment>
   );
 
+  const Popups = (
+    <React.Fragment>
+      {popups.map((popup, index) => {
+        const widgets = popup.popup_content.map((i) => i.id).join(" ");
+
+        return (
+          <p key={index}>
+            {popup.id}
+            {" "}{widgets}
+          </p>
+        );
+      })}
+    </React.Fragment>
+  );
+
   return (
     <React.Fragment>
       <EmbedPageContainer>
         {EmbedImage}
         {Hotspots}
+        {Popups}
       </EmbedPageContainer>
     </React.Fragment>
   );
@@ -116,7 +135,9 @@ const HotspotWrap = ({ children }) => (
 );
 
 const EmbedPageContainer = ({ children }) => (
-  <div className="container px-0 text-center imageMarker">{children}</div>
+  <div className="container px-0 text-center imageMarker mt-0 position-relative">
+    {children}
+  </div>
 );
 
 const EmbedLoading = () => (

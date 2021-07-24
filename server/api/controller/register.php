@@ -24,8 +24,7 @@ class RegisterController extends User
             $this->username = $data->username;
             $this->email = $data->email;
             $this->password = $data->password;
-            $database = new Database();
-            $db = $database->getConnection();
+            $db = DB::getInstance();
             parent::__construct($db);
         }
     }
