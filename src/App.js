@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Home/Navbar";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Allimages from "./pages/Allimages";
-import HotspotImage from "./components/HotspotImage";
+import HotspotImage from "./components/Editor/HotspotImage";
 import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/Home/Dashboard";
 import PrivateRoute, { tokenValidation } from "./components/PrivateRoute";
 import NewImage from "./pages/NewImage";
 import Image from "./pages/Image";

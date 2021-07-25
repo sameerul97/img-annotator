@@ -1,8 +1,8 @@
 import React from "react";
-import HotspotImage from "../components/HotspotImage";
+import HotspotImageEditor from "../components/Editor/HotspotImage";
 
 function Image(props) {
-  return <HotspotImage id={props.match.params} />;
+  return <HotspotImageEditor id={props.match.params} />;
 }
 
 export default Image;

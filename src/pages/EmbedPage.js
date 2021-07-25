@@ -105,7 +105,7 @@ function EmbedPage(props) {
   const Popups = (
     <React.Fragment>
       {popups.map((popup, index) => {
-        const widgets = popup.popup_content.map((i) => i.id).join(" ");
+        const widgets = popup.popup_content.map((i) => i.widget_type_id).join(" ");
 
         return (
           <p key={index}>
