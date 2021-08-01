@@ -4,60 +4,21 @@ import { useParams } from "react-router-dom";
 import "../Marker.css";
 import Hotspot from "../components/Embed/Hotspot";
 import { ParseData } from "../utils/ParseImageData";
+
 import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
+import useFetchImage from "../hooks/useFetchImage";
+
+import Text from "../components/Embed/Text";
+import Popup from "../components/Embed/Popup";
 
 function EmbedPage(props) {
-  const [loaded, setLoaded] = useState(false);
-  const [image, setImage] = useState({});
-  const [markers, setMarkers] = useState([]);
-  const [popups, setPopups] = useState([]);
-  const itemsRef = useRef([]);
-
   const { id } = useParams();
 
-  useEffect(() => {
-    props.setIsEmbedPage(true);
-  }, []);
+  const [popupState, setPopupState] = React.useState({ open: false });
+  const [selectedMarker, setSelectedMarker] = useState();
+  const [selectedPopup, setSelectedPopup] = useState();
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const res = await API.get(`/image/`, {
-          params: {
-            image_id: parseInt(id)
-          },
-          headers: {
-            Authorization: localStorage.getItem("token")
-          }
-        });
-
-        const [fetchedImage, popupContent] = ParseData(res.data);
-        console.log(popupContent);
-
-        setImage(fetchedImage);
-        setMarkers(fetchedImage.marker_positions);
-        setPopups(popupContent);
-
-        setLoaded(true);
-      } catch (error) {
-        let errorResponse = error.response;
-
-        if (errorResponse.data.message === "Expired token") {
-          props.history.push(`/login/`);
-        }
-
-        if (errorResponse.status === 404) {
-          // setImageNotFoundError(true);
-          // setImageNotFoundErrorMessage(errorResponse.data.message);
-        }
-      }
-
-      return;
-    };
-
-    fetchImage();
-  }, [id, props.history]);
-
+  // custom hooks
   const [
     imageRef,
     imageLoaded,
@@ -67,65 +28,81 @@ function EmbedPage(props) {
     imageWidth,
     imageHeight
   ] = useGetImageNaturalData();
+  const { status, image, markers, popup_data, error } = useFetchImage(id);
 
-  let EmbedImage = <EmbedLoading />;
+  useEffect(() => {
+    props.setIsEmbedPage(true);
+  }, []);
 
-  if (loaded) {
-    EmbedImage = (
-      <React.Fragment>
-        {!imageLoaded && <EmbedLoading />}
-        <img
-          ref={imageRef}
-          onLoad={onLoad}
-          src={image.url}
-          alt={image.url}
-          className="target rounded img-fluid w-100 shadow"
-        />
-      </React.Fragment>
-    );
-  }
+  useEffect(() => {
+    if (selectedMarker) {
+      setSelectedPopup(popup_data.find(i => i.id === selectedMarker.m_id).popup_content.find(j => j.widget_type_id === "widget_id_3").src);
+    }
+  }, [selectedMarker, popup_data]);
+
+  function hotspotClicked(id) {
+    setSelectedPopup("");
+    setSelectedMarker(markers.find(i => i.m_id === id))
+  };
+
+  const EmbedImage = (
+    <React.Fragment>
+      {!imageLoaded && <EmbedLoading />}
+      <img
+        ref={imageRef}
+        onLoad={onLoad}
+        src={image.url}
+        alt={image.url}
+        className="target rounded img-fluid w-100 shadow"
+      />
+    </React.Fragment>
+  );
 
   const Hotspots = (
     <React.Fragment>
       {imageLoaded && (
-        <HotspotWrap>
+        <React.Fragment>
           {markers.map((image_position, index) => (
             <Hotspot
-              ref={(el) => (itemsRef.current[index] = el)}
               key={index}
               markers={image_position}
               width={imageWidth / naturalImageWidth}
+              hotspotClicked={hotspotClicked}
             />
           ))}
-        </HotspotWrap>
+        </React.Fragment>
       )}
     </React.Fragment>
   );
 
-  const Popups = (
+  const PopupContainer = (
     <React.Fragment>
-      {popups.map((popup, index) => {
-        const widgets = popup.popup_content.map((i) => i.widget_type_id).join(" ");
-
-        return (
-          <p key={index}>
-            {popup.id}
-            {" "}{widgets}
-          </p>
-        );
-      })}
+      {selectedPopup &&
+        <Popup
+          widgets={selectedPopup}
+          markers={selectedMarker}
+          width={imageWidth / naturalImageWidth}
+        />
+      }
     </React.Fragment>
   );
 
   return (
-    <React.Fragment>
-      <EmbedPageContainer>
-        {EmbedImage}
-        {Hotspots}
-        {Popups}
-      </EmbedPageContainer>
-    </React.Fragment>
-  );
+    <EmbedPageContainer>
+      {status === 'idle' && <EmbedLoading />}
+      {status === 'error' && <div>{error}</div>}
+      {status === 'fetching' && <EmbedLoading />}
+      {status === 'fetched' && (
+        <React.Fragment>
+          {EmbedImage}
+          <HotspotWrap>
+            {Hotspots}
+            {PopupContainer}
+          </HotspotWrap>
+        </React.Fragment>
+      )}
+    </EmbedPageContainer>
+  )
 }
 
 export default EmbedPage;

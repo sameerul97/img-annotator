@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Hotspot = React.forwardRef((props, ref) => {
+const Hotspot = (props) => {
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
 
@@ -21,27 +21,19 @@ const Hotspot = React.forwardRef((props, ref) => {
   return (
     <div
       className={`item-point circle pulse2`}
-      data-top={props.markers.top}
-      id={props.markers.m_id}
       style={{ top: top, left: left }}
-      data-left={props.markers.left}
-      data-key={props.markers.m_id}
-      key={props.markers.m_id}
-      // data-popupid={`#popup` + props.image_position.popup_id}
-      data-popupid={`#popup` + props.markers.popup_id}
+      onClick={() => props.hotspotClicked(props.markers.m_id)}
     >
       <div>
         <a
           href="#!"
-          onClick={(e) => {
-            e.preventDefault();
-          }}
+          onClick={(e) => e.preventDefault()}
           className="toggle"
         >
         </a>
       </div>
     </div>
   );
-});
+};
 
 export default Hotspot;

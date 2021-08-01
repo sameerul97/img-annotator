@@ -6,7 +6,7 @@ const useGetImageNaturalData = () => {
   const [imageWidth, setImageWidth] = useState(false);
   const [naturalImageHeight, setNaturalImageHeight] = useState(false);
   const [naturalImageWidth, setNaturalImageWidth] = useState(false);
-  const ref = useRef();
+  const ref = useRef(null);
 
   const handleWindowSizeChange = () => {
     setImageWidth(ref.current.width);

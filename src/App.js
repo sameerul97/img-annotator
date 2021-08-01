@@ -13,6 +13,7 @@ import Image from "./pages/Image";
 
 import NotFoundImage from "./assets/page_not_found.svg";
 import EmbedPage from "./pages/EmbedPage";
+import EmbedPageT from "./pages/EmbedPageT";
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -64,7 +65,6 @@ function App() {
             exact
             render={() => <EmbedPage setIsEmbedPage={setIsEmbedPage} />}
           // setUserLoggedIn={setUserLoggedIn}
-
           />
           <Route
             path="/login"
