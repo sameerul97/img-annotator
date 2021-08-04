@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import API from "../api";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../Marker.css";
-import Hotspot from "../components/Embed/Hotspot";
-import { ParseData } from "../utils/ParseImageData";
 
 import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
 import useFetchImage from "../hooks/useFetchImage";
 
 import Text from "../components/Embed/Text";
 import Popup from "../components/Embed/Popup";
+import Hotspot from "../components/Embed/Hotspot";
 
 function EmbedPage(props) {
   const { id } = useParams();
 
-  const [popupState, setPopupState] = React.useState({ open: false });
+  const [popupState, setPopupState] = useState({ open: false });
   const [selectedMarker, setSelectedMarker] = useState();
   const [selectedPopup, setSelectedPopup] = useState();
 
@@ -81,7 +79,8 @@ function EmbedPage(props) {
         <Popup
           widgets={selectedPopup}
           markers={selectedMarker}
-          width={imageWidth / naturalImageWidth}
+          width={imageWidth  }
+          naturalImageWidth={naturalImageWidth}
         />
       }
     </React.Fragment>
@@ -97,8 +96,8 @@ function EmbedPage(props) {
           {EmbedImage}
           <HotspotWrap>
             {Hotspots}
-            {PopupContainer}
           </HotspotWrap>
+          {PopupContainer}
         </React.Fragment>
       )}
     </EmbedPageContainer>
