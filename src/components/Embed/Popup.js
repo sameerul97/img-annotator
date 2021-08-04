@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
+import { Context } from '../../store/EmbedStore';
 
 const Popup = (props) => {
     const [popupStyle, setPopupStyle] = useState();
@@ -8,9 +9,12 @@ const Popup = (props) => {
     const [isLeft, setIsLeft] = useState();
     const [widgets, setWidgets] = useState();
 
+  const [state] = useContext(Context)
+
+
     useEffect(() => {
-        setWidgets(props.widgets);
-        setIframeSrc(props.widgets);
+        // setWidgets(props.widgets);
+        // setIframeSrc(props.widgets);
     }, [props]);
 
     useEffect(() => {
@@ -42,18 +46,29 @@ const Popup = (props) => {
             }
         }
     }, [props.markers.top, props.markers.left, props.width, props.naturalImageWidth, isMobileScreen]);
+    
+    console.log(state.loading);
+
+    if(state.loading){
+        console.log("Loading");
+        return(
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        )
+    }
 
     return (
-        <div style={popupStyle} className="pointBox showflip">
+        <div style={popupStyle} className="pointBox showflip smoothTransition">
             <PopupBoxArrow isLeft={isLeft} isMobileScreen={isMobileScreen} top={props.markers.top} width={props.width / props.naturalImageWidth} />
-            <PopupCloseButton />
+            <PopupCloseButton closePopup={props.closePopup} />
             <div className="video_wrapper_on_drag py-5 px-2 position-relative">
                 <div className="embed-container">
                     <iframe
                         width="560"
                         height="315"
                         className="border-0"
-                        src={iframeSrc}
+                        src={state.selectedPopup}
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         title="video_"
                     />
@@ -73,7 +88,7 @@ const PopupBoxArrow = ({ isMobileScreen, top, width, isLeft }) => {
     }
 
     return (
-        <div className="pointBoxArrow" style={arrowStyle}>
+        <div className="pointBoxArrow smoothTransition" style={arrowStyle}>
             {!isLeft ?
                 <svg
                     width="20"
@@ -107,14 +122,19 @@ const PopupBoxArrow = ({ isMobileScreen, top, width, isLeft }) => {
 };
 
 
-const PopupCloseButton = () => (
-    <div className="pointBoxClose exit"  >
-        <div className="pointBoxCloseIcon">
-            <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" stroke="black" strokeWidth="1">
-                    <path d="M2 14L14 2M2 2l12 12"></path>
-                </g>
-            </svg>
+const PopupCloseButton = ({ closePopup }) => {
+    const [state, dispatch] = useContext(Context)
+
+    return(
+        <div className="pointBoxClose exit" onClick={()=> {dispatch({ type: 'CLOSE_SELECTED_POPUP'})}}>
+            <div className="pointBoxCloseIcon">
+                <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" stroke="black" strokeWidth="1">
+                        <path d="M2 14L14 2M2 2l12 12"></path>
+                    </g>
+                </svg>
+            </div>
         </div>
-    </div>
-);
+    );
+}
+

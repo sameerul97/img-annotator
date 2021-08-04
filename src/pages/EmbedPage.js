@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import "../Marker.css";
+
+import { Context } from "../store/EmbedStore";
 
 import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
 import useFetchImage from "../hooks/useFetchImage";
@@ -11,6 +13,7 @@ import Hotspot from "../components/Embed/Hotspot";
 
 function EmbedPage(props) {
   const { id } = useParams();
+  const [state, dispatch] = useContext(Context);
 
   const [popupState, setPopupState] = useState({ open: false });
   const [selectedMarker, setSelectedMarker] = useState();
@@ -24,7 +27,7 @@ function EmbedPage(props) {
     naturalImageHeight,
     naturalImageWidth,
     imageWidth,
-    imageHeight
+    imageHeight,
   ] = useGetImageNaturalData();
   const { status, image, markers, popup_data, error } = useFetchImage(id);
 
@@ -32,16 +35,29 @@ function EmbedPage(props) {
     props.setIsEmbedPage(true);
   }, []);
 
-  useEffect(() => {
-    if (selectedMarker) {
-      setSelectedPopup(popup_data.find(i => i.id === selectedMarker.m_id).popup_content.find(j => j.widget_type_id === "widget_id_3").src);
-    }
-  }, [selectedMarker, popup_data]);
-
   function hotspotClicked(id) {
+    if (id === state.selectedMarker) return;
+
+    dispatch({ type: "SET_LOADING" });
+    setSelectedMarker(markers.find((i) => i.m_id === id));
+
+    dispatch({
+      type: "SET_SELECTED_POPUP",
+      payload: {
+        selectedPopup: popup_data
+          .find((i) => i.id === id)
+          .popup_content.find((j) => j.widget_type_id === "widget_id_3").src,
+        selectedMarker: markers.find((i) => i.m_id === id),
+      },
+    });
+
     setSelectedPopup("");
-    setSelectedMarker(markers.find(i => i.m_id === id))
-  };
+  }
+
+  function closePopup() {
+    setSelectedPopup("");
+    setSelectedMarker("");
+  }
 
   const EmbedImage = (
     <React.Fragment>
@@ -75,33 +91,32 @@ function EmbedPage(props) {
 
   const PopupContainer = (
     <React.Fragment>
-      {selectedPopup &&
+      {state.selectedPopup && (
         <Popup
-          widgets={selectedPopup}
+          // widgets={state.selectedPopup}
           markers={selectedMarker}
-          width={imageWidth  }
+          width={imageWidth}
           naturalImageWidth={naturalImageWidth}
+          // closePopup={closePopup}
         />
-      }
+      )}
     </React.Fragment>
   );
 
   return (
     <EmbedPageContainer>
-      {status === 'idle' && <EmbedLoading />}
-      {status === 'error' && <div>{error}</div>}
-      {status === 'fetching' && <EmbedLoading />}
-      {status === 'fetched' && (
+      {status === "idle" && <EmbedLoading />}
+      {status === "error" && <div>{error}</div>}
+      {status === "fetching" && <EmbedLoading />}
+      {status === "fetched" && (
         <React.Fragment>
           {EmbedImage}
-          <HotspotWrap>
-            {Hotspots}
-          </HotspotWrap>
+          <HotspotWrap>{Hotspots}</HotspotWrap>
           {PopupContainer}
         </React.Fragment>
       )}
     </EmbedPageContainer>
-  )
+  );
 }
 
 export default EmbedPage;
