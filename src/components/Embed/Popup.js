@@ -7,7 +7,7 @@ import PopupImageWidget from "./PopupWidgets/PopupImageWidget";
 import PopupVideoWidget from "./PopupWidgets/PopupVideoWidget";
 import PopupTextWidget from "./PopupWidgets/PopupTextWidget";
 import PopupButtonWidget from "./PopupWidgets/PopupButtonWidget";
-import PopupCarouselWidget from "../Editor/PopupWidgets/PopupCarouselWidget";
+import PopupCarouselWidget from "./PopupWidgets/PopupCarouselWidget";
 
 import { Widget_ID } from "../Widgets";
 
@@ -40,8 +40,8 @@ const Popup = (props) => {
       case Widget_ID.FreeTextWidget:
         return <PopupVideoWidget src={item.src} />;
 
-      // case Widget_ID.CarouselWidget:
-      //   return <PopupCarouselWidget />;
+      case Widget_ID.CarouselWidget:
+        return <PopupCarouselWidget src={item.src} />;
 
       default:
         return;
