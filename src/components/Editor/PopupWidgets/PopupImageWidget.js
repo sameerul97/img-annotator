@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getBase64 } from "../ImageUtils";
+import { getBase64 } from "../../ImageUtils";
 
 function PopupImageWidget(props) {
   // let isImageFirstWidgetInPopup = props.data.id === props.popupItems[0].id;

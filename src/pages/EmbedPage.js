@@ -44,19 +44,15 @@ function EmbedPage(props) {
     dispatch({
       type: "SET_SELECTED_POPUP",
       payload: {
-        selectedPopup: popup_data
-          .find((i) => i.id === id)
-          .popup_content.find((j) => j.widget_type_id === "widget_id_3").src,
+        popup: popup_data.find((i) => i.id === id).popup_content,
+        // selectedPopup: popup_data
+        //   .find((i) => i.id === id)
+        //   .popup_content.find((j) => j.widget_type_id === "widget_id_3").src,
         selectedMarker: markers.find((i) => i.m_id === id),
       },
     });
 
     setSelectedPopup("");
-  }
-
-  function closePopup() {
-    setSelectedPopup("");
-    setSelectedMarker("");
   }
 
   const EmbedImage = (
@@ -91,7 +87,7 @@ function EmbedPage(props) {
 
   const PopupContainer = (
     <React.Fragment>
-      {state.selectedPopup && (
+      {state.popup && (
         <Popup
           // widgets={state.selectedPopup}
           markers={selectedMarker}

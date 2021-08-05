@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react'
 import EmbedReducer from '../reducers/EmbedReducer';
 
 const initialState = {
-  popup: [],
+  popup: null,
   selectedMarker:null,
   selectedPopup: null,
   error: null,

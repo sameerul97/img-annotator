@@ -8,13 +8,13 @@ import { ReactComponent as DragLogo } from "../../assets/drag.svg";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { Widget_ID } from "../Widgets";
 
-import PopupImageWidget from "../PopupWidgets/PopupImageWidget";
-import PopupVideoWidget from "../PopupWidgets/PopupVideoWidget";
-import PopupHeaderWidget from "../PopupWidgets/PopupHeaderWidget";
-import PopupParagraphWidget from "../PopupWidgets/PopupParagraphWidget";
-import PopupButtonWidget from "../PopupWidgets/PopupButtonWidget";
-import PopupFreeTextWidget from "../PopupWidgets/PopupFreeTextWidget";
-import PopupCarouselWidget from "../PopupWidgets/PopupCarouselWidget";
+import PopupImageWidget from "./PopupWidgets/PopupImageWidget";
+import PopupVideoWidget from "./PopupWidgets/PopupVideoWidget";
+import PopupHeaderWidget from "./PopupWidgets/PopupHeaderWidget";
+import PopupParagraphWidget from "./PopupWidgets/PopupParagraphWidget";
+import PopupButtonWidget from "./PopupWidgets/PopupButtonWidget";
+import PopupFreeTextWidget from "./PopupWidgets/PopupFreeTextWidget";
+import PopupCarouselWidget from "./PopupWidgets/PopupCarouselWidget";
 
 import API from "../../api";
 
