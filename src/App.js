@@ -15,7 +15,8 @@ import NotFoundImage from "./assets/page_not_found.svg";
 import EmbedPage from "./pages/EmbedPage";
 import EmbedPageT from "./pages/EmbedPageT";
 
-import EmbedStore from './store/EmbedStore'
+import EmbedStore from "./store/EmbedStore";
+import { EmbedStoreProvider } from "./store/Embed";
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -46,7 +47,9 @@ function App() {
   return (
     <React.Fragment>
       <Router>
-        {!isEmbedPage && <Navbar userLoggedIn={userLoggedIn} isDemo={isDemo} logout={logout} />}
+        {!isEmbedPage && (
+          <Navbar userLoggedIn={userLoggedIn} isDemo={isDemo} logout={logout} />
+        )}
         <Switch>
           <Route path="/" exact component={Home} />
           <PrivateRoute
@@ -65,8 +68,12 @@ function App() {
           <Route
             path="/embed/:id"
             exact
-            render={() => <EmbedStore><EmbedPage setIsEmbedPage={setIsEmbedPage} /></EmbedStore>}
-          // setUserLoggedIn={setUserLoggedIn}
+            render={() => (
+              <EmbedStoreProvider>
+                <EmbedPage setIsEmbedPage={setIsEmbedPage} />
+              </EmbedStoreProvider>
+            )}
+            // setUserLoggedIn={setUserLoggedIn}
           />
           <Route
             path="/login"

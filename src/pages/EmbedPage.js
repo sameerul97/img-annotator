@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import "../Marker.css";
-
-import { Context } from "../store/EmbedStore";
+import { ActionType } from "../store/Embed/action-types";
+import { EmbedContext } from "../store/Embed";
 
 import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
 import useFetchImage from "../hooks/useFetchImage";
@@ -13,13 +13,11 @@ import Hotspot from "../components/Embed/Hotspot";
 
 function EmbedPage(props) {
   const { id } = useParams();
-  const [state, dispatch] = useContext(Context);
+  const { state, dispatch } = useContext(EmbedContext);
 
-  const [popupState, setPopupState] = useState({ open: false });
   const [selectedMarker, setSelectedMarker] = useState();
-  const [selectedPopup, setSelectedPopup] = useState();
 
-  // custom hooks
+  // custom hook
   const [
     imageRef,
     imageLoaded,
@@ -27,7 +25,7 @@ function EmbedPage(props) {
     naturalImageHeight,
     naturalImageWidth,
     imageWidth,
-    imageHeight,
+    imageHeight
   ] = useGetImageNaturalData();
   const { status, image, markers, popup_data, error } = useFetchImage(id);
 
@@ -38,21 +36,16 @@ function EmbedPage(props) {
   function hotspotClicked(id) {
     if (id === state.selectedMarker) return;
 
-    dispatch({ type: "SET_LOADING" });
+    dispatch({ type: ActionType.SET_LOADING });
     setSelectedMarker(markers.find((i) => i.m_id === id));
 
     dispatch({
-      type: "SET_SELECTED_POPUP",
+      type: ActionType.SET_SELECTED_POPUP,
       payload: {
         popup: popup_data.find((i) => i.id === id).popup_content,
-        // selectedPopup: popup_data
-        //   .find((i) => i.id === id)
-        //   .popup_content.find((j) => j.widget_type_id === "widget_id_3").src,
-        selectedMarker: markers.find((i) => i.m_id === id),
-      },
+        selectedMarker: markers.find((i) => i.m_id === id)
+      }
     });
-
-    setSelectedPopup("");
   }
 
   const EmbedImage = (
@@ -89,11 +82,9 @@ function EmbedPage(props) {
     <React.Fragment>
       {state.popup && (
         <Popup
-          // widgets={state.selectedPopup}
           markers={selectedMarker}
           width={imageWidth}
           naturalImageWidth={naturalImageWidth}
-          // closePopup={closePopup}
         />
       )}
     </React.Fragment>
