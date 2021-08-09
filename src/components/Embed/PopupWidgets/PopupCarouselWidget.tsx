@@ -7,10 +7,12 @@ import "swiper/components/effect-fade/effect-fade.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import "swiper/components/scrollbar/scrollbar.min.css";
 
+import { WidgetSrc, CarouselSlide } from "../interfaces";
+
 SwiperCore.use([Navigation, Scrollbar, A11y]);
 
-function PopupCarouselWidget({ src }) {
-  const [slides, setSlides] = useState();
+function PopupCarouselWidget({ src }: WidgetSrc) {
+  const [slides, setSlides] = useState<CarouselSlide[]>();
 
   useEffect(() => {
     setSlides(JSON.parse(src));
@@ -20,7 +22,7 @@ function PopupCarouselWidget({ src }) {
     return null;
   }
 
-  const LoadSlide = ({ item }) => {
+  const LoadSlide = (item: CarouselSlide) => {
     if (item.slide_type === "image") {
       return <ImageSlide src={item.src} />;
     }
@@ -33,7 +35,7 @@ function PopupCarouselWidget({ src }) {
   return (
     <Swiper navigation scrollbar={{ draggable: true }}>
       {slides.map((i, el) => {
-        return <SwiperSlide key={i.id}>{LoadSlide({ item: i })}</SwiperSlide>;
+        return <SwiperSlide key={i.id}>{LoadSlide(i)}</SwiperSlide>;
       })}
     </Swiper>
   );
@@ -41,7 +43,7 @@ function PopupCarouselWidget({ src }) {
 
 export default PopupCarouselWidget;
 
-const VideoSlide = ({ src }) => {
+const VideoSlide = ({ src }: WidgetSrc) => {
   return (
     <div className="video_wrapper_on_drag position-relative">
       <div className="embed-container">
@@ -58,6 +60,6 @@ const VideoSlide = ({ src }) => {
   );
 };
 
-const ImageSlide = ({ src }) => {
+const ImageSlide = ({ src }: WidgetSrc) => {
   return <img src={src} alt="empty" className="img-fluid" />;
 };

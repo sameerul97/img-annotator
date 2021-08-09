@@ -59,7 +59,6 @@ function ParseData(imageData) {
         /* TODO: Add carousel slide order */
 
         if (imageData[h].widget_type_id === Widget_ID.CarouselWidget) {
-          console.log(JSON.parse(imageData[h].content));
           let temp_carousel_content = JSON.parse(imageData[h].content);
           imageData[h].content = JSON.stringify(
             temp_carousel_content.sort((a, b) => a.order_no - b.order_no)

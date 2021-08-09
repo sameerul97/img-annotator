@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertFromRaw } from "draft-js";
 
-import Spacer from "../Spacer";
+import Spacer from "../Spacer.tsx";
 
 function PopupTextWidget({ src }) {
   const [headerSrc, setHeaderSrc] = useState();

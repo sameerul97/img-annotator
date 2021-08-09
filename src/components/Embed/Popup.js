@@ -7,9 +7,9 @@ import PopupImageWidget from "./PopupWidgets/PopupImageWidget";
 import PopupVideoWidget from "./PopupWidgets/PopupVideoWidget";
 import PopupTextWidget from "./PopupWidgets/PopupTextWidget";
 import PopupButtonWidget from "./PopupWidgets/PopupButtonWidget";
-import PopupCarouselWidget from "./PopupWidgets/PopupCarouselWidget";
-import PopupArrow from "./PopupArrow";
-import PopupClose from "./PopupClose";
+import PopupCarouselWidget from "./PopupWidgets/PopupCarouselWidget.tsx";
+import PopupArrow from "./PopupArrow.tsx";
+import PopupClose from "./PopupClose.tsx";
 
 import { Widget_ID } from "../Widgets";
 

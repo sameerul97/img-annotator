@@ -6,13 +6,10 @@ import { ActionType } from "../../store/Embed/action-types";
 const PopupClose = () => {
   const { dispatch } = useContext(EmbedContext);
 
+  const close = () => dispatch({ type: ActionType.CLOSE_SELECTED_POPUP });
+
   return (
-    <div
-      className="pointBoxClose exit"
-      onClick={() => {
-        dispatch({ type: ActionType.CLOSE_SELECTED_POPUP });
-      }}
-    >
+    <div className="pointBoxClose exit" onClick={close}>
       <div className="pointBoxCloseIcon">
         <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg">
           <g fill="none" stroke="black" strokeWidth="1">

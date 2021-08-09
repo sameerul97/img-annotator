@@ -1,8 +1,14 @@
 import React from "react";
+import { PopupArrowProps } from "./interfaces";
 
-const PopupArrow = ({ isMobileScreen, top, width, isLeft }) => {
+const PopupArrow = ({
+  isMobileScreen,
+  top,
+  width,
+  isLeft
+}: PopupArrowProps) => {
   const arrowStyle = {
-    top: parseFloat(top * width) / 2 + 25,
+    top: (top * width) / 2 + 25,
     right: !isLeft ? -18 : "unset",
     left: isLeft ? -17 : "unset"
   };

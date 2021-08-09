@@ -3,11 +3,12 @@ import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertFromRaw } from "draft-js";
 
 import Spacer from "../Spacer";
+import { WidgetSrc } from "../interfaces";
 
-function PopupButtonWidget({ src }) {
-  const [buttonUrlLink, setButtonUrlLink] = useState();
+function PopupButtonWidget({ src }: WidgetSrc) {
+  const [buttonUrlLink, setButtonUrlLink] = useState<string>();
   const [editorState, setEditorState] = useState({
-    value: EditorState.createEmpty(),
+    value: EditorState.createEmpty()
   });
 
   useEffect(() => {
@@ -19,7 +20,7 @@ function PopupButtonWidget({ src }) {
       setEditorState({
         value: EditorState.createWithContent(
           convertFromRaw(button.buttonTextSrc)
-        ),
+        )
       });
     }
   }, [src]);

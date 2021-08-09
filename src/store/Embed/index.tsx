@@ -17,7 +17,7 @@ const EmbedContext = createContext<{
   dispatch: Dispatch<Action>;
 }>({
   state: initialState,
-  dispatch: () => undefined
+  dispatch: () => null
 });
 
 const EmbedStoreProvider = ({ children }: { children: ReactNode }) => {
