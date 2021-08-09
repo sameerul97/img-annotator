@@ -2,14 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertFromRaw } from "draft-js";
 
-import Spacer from "../Spacer.tsx";
+import Spacer from "../Spacer";
+import { WidgetSrc } from "../interfaces";
 
-function PopupTextWidget({ src }) {
-  const [headerSrc, setHeaderSrc] = useState();
+function PopupTextWidget({ src }: WidgetSrc) {
+  const [headerSrc, setHeaderSrc] = useState({
+    value: EditorState.createEmpty()
+  });
 
   useEffect(() => {
     setHeaderSrc({
-      value: EditorState.createWithContent(convertFromRaw(JSON.parse(src))),
+      value: EditorState.createWithContent(convertFromRaw(JSON.parse(src)))
     });
   }, [src]);
 

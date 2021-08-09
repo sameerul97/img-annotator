@@ -16,7 +16,7 @@ const reducer = (state: InitialStateType, action: Action): InitialStateType => {
         case ActionType.CLOSE_SELECTED_POPUP: {
             return {
                 ...state,
-                popup: null,
+                popup: [],
                 selectedMarker: null,
                 loading: false,
             };

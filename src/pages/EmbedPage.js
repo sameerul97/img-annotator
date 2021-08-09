@@ -7,9 +7,8 @@ import { EmbedContext } from "../store/Embed";
 import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
 import useFetchImage from "../hooks/useFetchImage";
 
-import Text from "../components/Embed/Text";
-import Popup from "../components/Embed/Popup";
-import Hotspot from "../components/Embed/Hotspot";
+import Popup from "../components/Embed/Popup.tsx";
+import Hotspot from "../components/Embed/Hotspot.tsx";
 
 function EmbedPage(props) {
   const { id } = useParams();
@@ -27,6 +26,7 @@ function EmbedPage(props) {
     imageWidth,
     imageHeight
   ] = useGetImageNaturalData();
+
   const { status, image, markers, popup_data, error } = useFetchImage(id);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ function EmbedPage(props) {
 
   const PopupContainer = (
     <React.Fragment>
-      {state.popup && (
+      {state.popup.length > 0 && (
         <Popup
           markers={selectedMarker}
           width={imageWidth}

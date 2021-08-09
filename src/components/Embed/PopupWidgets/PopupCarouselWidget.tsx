@@ -34,9 +34,9 @@ function PopupCarouselWidget({ src }: WidgetSrc) {
 
   return (
     <Swiper navigation scrollbar={{ draggable: true }}>
-      {slides.map((i, el) => {
-        return <SwiperSlide key={i.id}>{LoadSlide(i)}</SwiperSlide>;
-      })}
+      {slides.map((i) => (
+        <SwiperSlide key={i.id}>{LoadSlide(i)}</SwiperSlide>
+      ))}
     </Swiper>
   );
 }

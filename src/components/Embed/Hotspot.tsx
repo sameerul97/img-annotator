@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { HotspotProps } from "./interfaces";
 
-const Hotspot = (props) => {
-  const [top, setTop] = useState(0);
-  const [left, setLeft] = useState(0);
+const Hotspot = (props: HotspotProps) => {
+  const [top, setTop] = useState<number>(0);
+  const [left, setLeft] = useState<number>(0);
 
   useEffect(() => {
     setTop(
       isNaN(props.markers.top * props.width)
         ? 0
-        : parseFloat(props.markers.top * props.width)
+        : props.markers.top * props.width
     );
 
     setLeft(
       isNaN(props.markers.left * props.width)
         ? 0
-        : parseFloat(props.markers.left * props.width)
+        : props.markers.left * props.width
     );
   }, [props.markers.top, props.markers.left, props.width]);
 
@@ -27,9 +28,12 @@ const Hotspot = (props) => {
       <div>
         <a
           href="#!"
+          aria-label="Click hotspot"
+          aria-hidden="true"
           onClick={(e) => e.preventDefault()}
           className="toggle"
         >
+          {""}
         </a>
       </div>
     </div>

@@ -7,20 +7,21 @@ import PopupImageWidget from "./PopupWidgets/PopupImageWidget";
 import PopupVideoWidget from "./PopupWidgets/PopupVideoWidget";
 import PopupTextWidget from "./PopupWidgets/PopupTextWidget";
 import PopupButtonWidget from "./PopupWidgets/PopupButtonWidget";
-import PopupCarouselWidget from "./PopupWidgets/PopupCarouselWidget.tsx";
-import PopupArrow from "./PopupArrow.tsx";
-import PopupClose from "./PopupClose.tsx";
+import PopupCarouselWidget from "./PopupWidgets/PopupCarouselWidget";
+import PopupArrow from "./PopupArrow";
+import PopupClose from "./PopupClose";
 
 import { Widget_ID } from "../Widgets";
+import { PopupProps, PopupStyle, PopupItem } from "./interfaces";
 
-const Popup = (props) => {
-  const [popupStyle, setPopupStyle] = useState();
-  const [isLeft, setIsLeft] = useState();
+const Popup = (props: PopupProps) => {
+  const [popupStyle, setPopupStyle] = useState<PopupStyle>();
+  const [isLeft, setIsLeft] = useState<boolean>();
 
   const isMobileScreen = useCheckMobileScreen();
   const { state } = useContext(EmbedContext);
 
-  const WidgetSelected = ({ item }) => {
+  const WidgetSelected = (item: PopupItem) => {
     switch (item.widget_type_id) {
       case Widget_ID.ImageWidget:
         return <PopupImageWidget src={item.src} />;
@@ -54,11 +55,11 @@ const Popup = (props) => {
 
     let _left = isNaN((props.markers.left * _width) / _naturalImageWidth)
       ? 0
-      : parseFloat((props.markers.left * _width) / _naturalImageWidth);
+      : (props.markers.left * _width) / _naturalImageWidth;
 
     let _top = isNaN((props.markers.top * _width) / _naturalImageWidth)
       ? 0
-      : parseFloat((props.markers.top * _width) / _naturalImageWidth) / 2;
+      : (props.markers.top * _width) / _naturalImageWidth / 2;
 
     if (!isMobileScreen) {
       if (_left >= (_width / 100) * 58) {
@@ -95,10 +96,8 @@ const Popup = (props) => {
       <PopupClose />
 
       <div className="popup_widgets">
-        {state.popup.map((item, index) => (
-          <React.Fragment key={item.id}>
-            {WidgetSelected({ item: item })}
-          </React.Fragment>
+        {state.popup.map((item: PopupItem) => (
+          <React.Fragment key={item.id}>{WidgetSelected(item)}</React.Fragment>
         ))}
       </div>
     </div>

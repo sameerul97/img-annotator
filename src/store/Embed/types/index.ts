@@ -20,7 +20,7 @@ type SelectedMarker = {
 };
 
 type InitialStateType = {
-  popup: Array<Popup> | null;
+  popup: Array<Popup>;
   selectedMarker: SelectedMarker | null;
   selectedPopup: null;
   error: string | null;

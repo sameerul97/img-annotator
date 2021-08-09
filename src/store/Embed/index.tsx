@@ -5,7 +5,7 @@ import type { InitialStateType } from "./types";
 import { Action } from "./actions";
 
 const initialState = {
-  popup: null,
+  popup: [],
   selectedMarker: null,
   selectedPopup: null,
   error: null,

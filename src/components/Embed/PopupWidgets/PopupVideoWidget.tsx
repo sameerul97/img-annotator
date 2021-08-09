@@ -1,6 +1,7 @@
 import React from "react";
+import { WidgetSrc } from "../interfaces";
 
-function PopupVideoWidget({ src }) {
+function PopupVideoWidget({ src }: WidgetSrc) {
   return (
     <div className="video_wrapper_on_drag position-relative">
       <div className="embed-container">
