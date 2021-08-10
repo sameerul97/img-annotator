@@ -29,10 +29,6 @@ function EmbedPage(props) {
 
   const { status, image, markers, popup_data, error } = useFetchImage(id);
 
-  useEffect(() => {
-    props.setIsEmbedPage(true);
-  }, []);
-
   function hotspotClicked(id) {
     if (id === state.selectedMarker) return;
 

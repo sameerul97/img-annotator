@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { HashRouter, Link } from "react-router-dom";
 
 import "../../Marker.css";
+import { APP_DOMAIN } from "../../helper";
+
+const iconBgStyle = {
+  background: "#2a85a5",
+  padding: "10px",
+  borderRadius: "20px"
+};
 
 function MarkerEditorPanel(props) {
-  const iconBgStyle = {
-    background: "#2a85a5",
-    padding: "10px",
-    borderRadius: "20px"
-  };
   return (
     <>
       <div className="row text-left  mx-0 ">
@@ -57,6 +59,7 @@ function MarkerEditorPanel(props) {
                 style={iconBgStyle}
               ></i>
             </a>
+            <CopyEmbedCodeButton imageId={props.imageId} />
           </div>
         </div>
 
@@ -72,6 +75,44 @@ function MarkerEditorPanel(props) {
     </>
   );
 }
+
+const CopyEmbedCodeButton = ({ imageId }) => {
+  const toolTipRef = useRef(null);
+  const [toolTipState, setToolTipState] = useState("Copy embed code");
+
+  function copyEmbedCodeIntoClipBoard(e) {
+    e.preventDefault();
+
+    window
+      .$("#embedCodeButton")
+      .attr("data-original-title", "Copied to clipboard!")
+      .tooltip("show");
+
+    setTimeout(() => {
+      window
+        .$("#embedCodeButton")
+        .attr("data-original-title", "Copy embed code")
+        .tooltip("show");
+    }, 2500);
+    navigator.clipboard.writeText(`${APP_DOMAIN}/embed/${imageId}`);
+  }
+
+  return (
+    <button
+      className="smoothTransition btn btn-sm shadow-none"
+      data-toggle="tooltip"
+      data-placement="top"
+      title={toolTipState}
+      onClick={copyEmbedCodeIntoClipBoard}
+      aria-disabled="true"
+      data-tooltipdata={toolTipState}
+      ref={toolTipRef}
+      id="embedCodeButton"
+    >
+      <i className="text-white far fa-copy fa-1x" style={iconBgStyle}></i>
+    </button>
+  );
+};
 
 const PreviewButton = ({ imageId }) => {
   return (

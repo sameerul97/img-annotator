@@ -10,4 +10,16 @@ function getApiDomain() {
   }
 }
 
+function getAppDomain() {
+  const url = window.location.href.split("/")[2];
+  if (url === "planetradio.co.uk" || url === "creative.bauermedia.co.uk") {
+    return "https://creative.bauermedia.co.uk/scrollmagic/img-annotator-v4";
+  } else if (url === "demomatthobbsnet.eu-west-2.elasticbeanstalk.com") {
+    return "http://demomatthobbsnet.eu-west-2.elasticbeanstalk.com/img-annotator-master";
+  } else {
+    return `http://${url}/#`;
+  }
+}
+
 export const API_DOMAIN = getApiDomain();
+export const APP_DOMAIN = getAppDomain();
