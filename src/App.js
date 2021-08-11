@@ -70,8 +70,7 @@ function App() {
             exact
             render={() => (
               <EmbedStoreProvider>
-                {setIsEmbedPage(true)}
-                <EmbedPage />
+                <EmbedPage setIsEmbedPage={setIsEmbedPage} />
               </EmbedStoreProvider>
             )}
             // setUserLoggedIn={setUserLoggedIn}

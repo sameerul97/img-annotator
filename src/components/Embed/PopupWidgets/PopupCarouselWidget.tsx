@@ -22,13 +22,13 @@ function PopupCarouselWidget({ src }: WidgetSrc) {
     return null;
   }
 
-  const LoadSlide = (item: CarouselSlide) => {
-    if (item.slide_type === "image") {
-      return <ImageSlide src={item.src} />;
+  const LoadSlide = (slide: CarouselSlide) => {
+    if (slide.slide_type === "image") {
+      return <ImageSlide slide={slide} />;
     }
 
-    if (item.slide_type === "video") {
-      return <VideoSlide src={item.src} />;
+    if (slide.slide_type === "video") {
+      return <VideoSlide slide={slide} />;
     }
   };
 
@@ -43,23 +43,30 @@ function PopupCarouselWidget({ src }: WidgetSrc) {
 
 export default PopupCarouselWidget;
 
-const VideoSlide = ({ src }: WidgetSrc) => {
+const VideoSlide = ({ slide }: { slide: CarouselSlide }) => {
   return (
-    <div className="video_wrapper_on_drag position-relative">
-      <div className="embed-container">
-        <iframe
-          width="560"
-          height="315"
-          className="border-0"
-          src={src}
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          title="video_"
-        />
-      </div>
+    <div className="embed-container">
+      <iframe
+        width="560"
+        height="315"
+        className="border-0"
+        src={slide.src}
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        title="video_"
+      />
     </div>
   );
 };
 
-const ImageSlide = ({ src }: WidgetSrc) => {
-  return <img src={src} alt="empty" className="img-fluid" />;
+const ImageSlide = ({ slide }: { slide: CarouselSlide }) => {
+  return (
+    <React.Fragment>
+      <div className="pb-3">
+        <img src={slide.src} alt="empty" className="img-fluid" />
+        <SlideCaption caption={slide.caption} />
+      </div>
+    </React.Fragment>
+  );
 };
+
+const SlideCaption = ({ caption }: { caption: string }) => <p>{caption}</p>;

@@ -323,6 +323,7 @@ img {
     position: relative;
     padding-bottom: 56.25%;
     height: 0;
+    height: 350px;
     overflow: hidden;
     max-width: 100%;
     /* margin-top: 40px; */
@@ -1126,9 +1127,9 @@ Responsive
 
 @media (max-width: 768px) {
     .pointBox {
-        top: 50% !important;
+        top: 0% !important;
         left: 50% !important;
-        transform: translate(-50%, -50%) !important;
+        transform: translate(-50%, -0%) !important;
         width: 100%;
         max-width: 80%;
     }
