@@ -63,7 +63,7 @@ function Images() {
 
   useEffect(() => {
     const fetchAllImage = async () => {
-      const allImages = await API.get(`/allimages/`, {
+      const allImages = await API.get(`/allimages/index.php`, {
         params: {},
         headers: {
           Authorization: localStorage.getItem("token")

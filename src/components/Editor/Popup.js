@@ -218,7 +218,6 @@ function Popup(props, ref) {
       setTimeout(() => {
         setAnimateElements(false);
       }, 400);
-      console.log(props.data);
 
       let popups = props.data.popup_content;
 
@@ -241,7 +240,7 @@ function Popup(props, ref) {
         }
       )
         .then((res) => {
-          console.log(res);
+          // console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -253,7 +252,7 @@ function Popup(props, ref) {
   const deleteAWidget = (e) => {
     let widgetId = e.currentTarget.id;
 
-    API.delete(`/popup_widget/`, {
+    API.delete(`/popup_widget/index.php`, {
       data: {
         marker_id: props.data.id,
         popup_widget_id: widgetId,

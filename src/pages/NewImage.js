@@ -22,16 +22,14 @@ class NewImage extends React.Component {
 
   getAllBauerStation = async (url) => {
     return new Promise((resolve, reject) => {
-      API.get("/stations/", {
+      API.get("/stations/index.php", {
         params: {},
         headers: {
           Authorization: localStorage.getItem("token"),
         },
       })
         .then((res) => {
-          if (res.statusText) {
-            resolve(res.data);
-          }
+          resolve(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -81,7 +79,7 @@ class NewImage extends React.Component {
         formData.append("name", this.state.imageName);
         formData.append("image", this.state.selectedImage[0]);
 
-        let response = await API.post(`/image/`, formData, {
+        let response = await API.post(`/image/index.php`, formData, {
           headers: {
             "content-type": "multipart/form-data",
             Authorization: localStorage.getItem("token"),

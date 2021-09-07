@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { HashRouter, Link } from "react-router-dom";
 
 import "../../Marker.css";
-import { APP_DOMAIN } from "../../helper";
+import { SERVER_APP_DOMAIN } from "../../helper";
 
 const iconBgStyle = {
   background: "#2a85a5",
@@ -94,7 +94,7 @@ const CopyEmbedCodeButton = ({ imageId }) => {
         .attr("data-original-title", "Copy embed code")
         .tooltip("show");
     }, 2500);
-    navigator.clipboard.writeText(`${APP_DOMAIN}/embed/${imageId}`);
+    navigator.clipboard.writeText(`<script src='${SERVER_APP_DOMAIN}/embed/index.php?id=${imageId}'></script>`);
   }
 
   return (

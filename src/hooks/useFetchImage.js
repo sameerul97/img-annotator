@@ -50,7 +50,7 @@ const useFetchImage = (id) => {
         dispatch({ type: "FETCHED", payload: data });
       } else {
         try {
-          const data = await API.get(`/image/`, {
+          const data = await API.get(`/image/index.php`, {
             params: {
               image_id: parseInt(id),
             },

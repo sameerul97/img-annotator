@@ -15,14 +15,15 @@ function Login(props) {
     setErrorMessage(false);
 
     e.preventDefault();
-    props.setUserLoggedIn(true);
 
-    API.post(`/login/`, { email: email, password: password })
+    API.post(`/login/index.php`, { email: email, password: password })
       .then((res) => {
         const response = res.data;
 
         localStorage.setItem("token", response.jwt);
-        history.push("/dashboard");
+        history.push("/image");
+
+        props.setUserLoggedIn(true);
       })
       .catch((err) => {
         let error = err.response.data;

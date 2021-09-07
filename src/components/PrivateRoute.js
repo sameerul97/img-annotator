@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const tokenValidation = (url) => {
   return new Promise((resolve, reject) => {
-    API.post("/token/", "", {
+    API.post("/token/index.php", "", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

@@ -95,7 +95,7 @@ function HotspotImageEditor(props) {
 
   function addNewMarker() {
     API.post(
-      `/marker/`,
+      `/marker/index.php`,
       {
         image_id: parseInt(image.id)
       },
@@ -227,7 +227,7 @@ function HotspotImageEditor(props) {
 
   const deleteMarker = (event) => {
     if (image.marker_positions.length > 1) {
-      API.delete("/marker/", {
+      API.delete("/marker/index.php", {
         data: {
           marker_id: parseInt(selectedMarker.markerId),
           popup_id: parseInt(selectedMarker.popupId)
@@ -294,7 +294,7 @@ function HotspotImageEditor(props) {
 
   const fetchImage = useCallback(async () => {
     try {
-      var res = await await API.get(`/image/`, {
+      var res = await await API.get(`/image/index.php`, {
         params: {
           image_id: parseInt(id)
         },
@@ -433,7 +433,7 @@ function HotspotImageEditor(props) {
   useEffect(() => {
     if (image.id) {
       API.put(
-        `/marker/`,
+        `/marker/index.php`,
         {
           image_id: parseInt(image.id),
           markers: image
@@ -575,7 +575,7 @@ function HotspotImageEditor(props) {
         });
     } else {
       API.put(
-        `/popup_widget/`,
+        `/popup_widget/index.php`,
         {
           marker_id: parseInt(popupModeMarkerSelected.markerId),
           popup_widget_id: popup_widget_id,
@@ -940,7 +940,7 @@ function HotspotImageEditor(props) {
     setNewWidgetBeingAdded(true);
 
     API.post(
-      `/popup_widget/`,
+      `/popup_widget/index.php`,
       {
         image_id: parseInt(image.id),
         marker_id: parseInt(popupModeMarkerSelected.markerId),

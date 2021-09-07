@@ -9,7 +9,7 @@ class App_Url
 
         if (isset($_ENV['APP_ENV'])) {
             if ($_ENV['APP_ENV'] === 'production') {
-                $this->baseUrl = "https://creative.bauermedia.co.uk/scrollmagic/img-annotator-v4/api/user_images/";
+                $this->baseUrl = "https://creative.bauermedia.co.uk/scrollmagic/img-annotator-v5/api/user_images/";
             }
         } else {
             $this->baseUrl = "http://localhost/api/user_images/";
@@ -23,10 +23,31 @@ class App_Url
 
         if (isset($_ENV['APP_ENV'])) {
             if ($_ENV['APP_ENV'] === 'production') {
-                $this->baseUrl = "https://creative.bauermedia.co.uk/scrollmagic/img-annotator-v4/api/popup_images/";
+                $this->baseUrl = "https://creative.bauermedia.co.uk/scrollmagic/img-annotator-v5/api/popup_images/";
             }
         } else {
             $this->baseUrl = "http://localhost/api/popup_images/";
+        }
+
+        return $this->baseUrl;
+    }
+
+    public function getAppIframeResizerBaseUrl()
+    {
+        $this->baseUrl = "https://creative.bauermedia.co.uk/scrollmagic/img-annotator-v5/embed/";
+
+        return $this->baseUrl;
+    }
+
+    public function getEmbedBaseUrl()
+    {
+
+        if (isset($_ENV['APP_ENV'])) {
+            if ($_ENV['APP_ENV'] === 'production') {
+                $this->baseUrl = "https://creative.bauermedia.co.uk/scrollmagic/img-annotator-v5/#/embed/";
+            }
+        } else {
+            $this->baseUrl = "http://localhost:3000/#/embed/";
         }
 
         return $this->baseUrl;

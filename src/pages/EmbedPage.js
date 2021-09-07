@@ -111,7 +111,7 @@ const HotspotWrap = ({ children }) => (
 );
 
 const EmbedPageContainer = ({ children }) => (
-  <div className="container px-0 text-center imageMarker mt-0 position-relative">
+  <div className="container embed-spacer px-0 text-center imageMarker position-relative" >
     {children}
   </div>
 );

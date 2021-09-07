@@ -47,7 +47,7 @@ function EmbedPageT(props: EmbedPageProps) {
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const res = await API.get(`/image/`, {
+        const res = await API.get(`/image/index.php`, {
           params: {
             image_id: id,
           },
