@@ -36,7 +36,7 @@ function PopupCarouselWidget(props) {
         selector: '[data-toggle="tooltip"]',
         delay: { show: 0, hide: 100 },
         trigger: "hover",
-        animation: true
+        animation: true,
       });
     });
     return () => {
@@ -71,7 +71,7 @@ function PopupCarouselWidget(props) {
       elRefs[elRefs.length - 1].current.scrollIntoView({
         behavior: "smooth",
         block: "end",
-        inline: "center"
+        inline: "center",
       });
 
       // TODO: Rewrite with async behaviour once backend route is implemented
@@ -97,7 +97,7 @@ function PopupCarouselWidget(props) {
         editingRef.current.scrollIntoView({
           behavior: "smooth",
           // block: "center",
-          inline: "center"
+          inline: "center",
         });
       }, 250);
     }
@@ -184,7 +184,7 @@ function PopupCarouselWidget(props) {
   const popupCancelAndUpdateButtonWrapperStyling = {
     bottom: "6px",
     left: "8px",
-    margin: 0
+    margin: 0,
   };
 
   return (
@@ -250,6 +250,7 @@ function PopupCarouselWidget(props) {
                 setReadMode(true);
                 setShowEditButton(false);
                 setCarouselData(initialCarouselState);
+
                 props.setPopupWidgetBeingEdited((prevState) => {
                   return prevState.filter(
                     (marker) => marker.id !== props.data.id
@@ -282,11 +283,17 @@ function PopupCarouselWidget(props) {
                 }
                 setReadMode(true);
                 setShowEditButton(false);
+
                 props.updateCarouselSlidesOrder(
                   props.data.id,
                   JSON.stringify(newCarouselData),
                   props.data.widget_type_id
                 );
+                props.setPopupWidgetBeingEdited((prevState) => {
+                  return prevState.filter(
+                    (marker) => marker.id !== props.data.id
+                  );
+                });
               }}
             >
               <i className="text-white m-auto far fa-check-circle fa-1x"> </i>
@@ -316,7 +323,7 @@ function PopupCarouselWidget(props) {
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%,-50%)",
-                zIndex: 10
+                zIndex: 10,
               }}
             >
               <div className="spinner-grow text-primary" role="status">
@@ -481,7 +488,7 @@ function CarouselVideoSlide(props) {
                       id={slideData.id}
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                     >
                       Delete
@@ -494,14 +501,14 @@ function CarouselVideoSlide(props) {
                       className="btn-sm smoothTransition btn badge ml-0 badge-pill badge-light text-dark"
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                       onClick={(e) => {
                         setUpdatingSlideData(true);
                         props.setIsSlideBeingEdited(true);
                         props.setSlideBeingEdited({
                           id: slideData.id,
-                          reactRef: props.reactRef
+                          reactRef: props.reactRef,
                         });
                       }}
                     >
@@ -525,7 +532,7 @@ function CarouselVideoSlide(props) {
                       id={slideData.id}
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                     >
                       Cancel
@@ -546,7 +553,7 @@ function CarouselVideoSlide(props) {
                       className="btn-sm btn smoothTransition badge ml-0 badge-pill badge-success text-white"
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                       onClick={(e) => {
                         props.updateASlide(
@@ -606,12 +613,12 @@ function CarouselVideoSlide(props) {
                 height: "auto",
 
                 minWidth: "300px",
-                minHeight: "300px"
+                minHeight: "300px",
               }
             : {
                 minWidth: "250px",
                 minHeight: "auto",
-                marginTop: "0em"
+                marginTop: "0em",
               }
         }
       >
@@ -663,12 +670,12 @@ function CarouselSlide(props) {
 
   const [verifyingImage, setVerifyingImage] = useState(false);
   const [editorState, setEditorState] = useState({
-    value: EditorState.createEmpty()
+    value: EditorState.createEmpty(),
   });
 
   const onEditorStateChange = (editorState) => {
     setEditorState({
-      value: editorState
+      value: editorState,
     });
 
     let newCaption = convertToRaw(editorState.getCurrentContent());
@@ -705,14 +712,14 @@ function CarouselSlide(props) {
           depth: 0,
           inlineStyleRanges: [],
           entityRanges: [],
-          data: { "text-align": "center" }
-        }
+          data: { "text-align": "center" },
+        },
       ],
-      entityMap: {}
+      entityMap: {},
     };
 
     setEditorState({
-      value: EditorState.createWithContent(convertFromRaw(defaultText))
+      value: EditorState.createWithContent(convertFromRaw(defaultText)),
     });
   }, []);
 
@@ -778,7 +785,7 @@ function CarouselSlide(props) {
                   top: "50%",
                   left: "50%",
                   transform: "translate(-50%,-50%)",
-                  zIndex: 10
+                  zIndex: 10,
                 }}
               >
                 <div className="spinner-grow text-primary" role="status">
@@ -802,7 +809,7 @@ function CarouselSlide(props) {
                       id={slideData.id}
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                     >
                       Delete
@@ -815,14 +822,14 @@ function CarouselSlide(props) {
                       className="btn-sm smoothTransition btn badge ml-0 badge-pill badge-light text-dark"
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                       onClick={(e) => {
                         setUpdatingSlideData(true);
                         props.setIsSlideBeingEdited(true);
                         props.setSlideBeingEdited({
                           id: slideData.id,
-                          reactRef: props.reactRef
+                          reactRef: props.reactRef,
                         });
                       }}
                     >
@@ -846,7 +853,7 @@ function CarouselSlide(props) {
                       id={slideData.id}
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                     >
                       Cancel
@@ -867,7 +874,7 @@ function CarouselSlide(props) {
                       className="btn-sm btn smoothTransition badge ml-0 badge-pill badge-success text-white"
                       style={{
                         padding: "5px 10px",
-                        borderRadius: "30px"
+                        borderRadius: "30px",
                       }}
                       onClick={(e) => {
                         props.updateASlide(
@@ -956,10 +963,10 @@ function CarouselSlide(props) {
             props.readMode || updatingSlideData
               ? {
                   height: "auto",
-                  minHeight: "300px"
+                  minHeight: "300px",
                 }
               : {
-                  minHeight: "auto"
+                  minHeight: "auto",
                 }
           }
         >
@@ -975,12 +982,12 @@ function CarouselSlide(props) {
                 ? {
                     height: "auto",
                     width: "300px",
-                    minWidth: "300px"
+                    minWidth: "300px",
                   }
                 : {
                     height: "auto",
                     width: "180px",
-                    minWidth: "180px"
+                    minWidth: "180px",
                   }
             }
           />
@@ -991,7 +998,7 @@ function CarouselSlide(props) {
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%,-50%)",
-                zIndex: 10
+                zIndex: 10,
               }}
             >
               <div className="spinner-grow text-light" role="status">
@@ -1099,12 +1106,12 @@ const getItemStyle = (
   transition: "all 0.65s ease-in-out",
   padding: `${grid}px`,
   background: isDragging ? "lightgreen" : "#19a2b8",
-  ...draggableStyle
+  ...draggableStyle,
 });
 
 const getListStyle = (isDraggingOver, isSlideBeingEdited) => ({
   background: isDraggingOver ? "lightblue" : "white",
   display: "flex",
   padding: grid,
-  overflow: isSlideBeingEdited ? "hidden" : "auto"
+  overflow: isSlideBeingEdited ? "hidden" : "auto",
 });
