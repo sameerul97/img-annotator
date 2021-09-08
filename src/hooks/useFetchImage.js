@@ -12,6 +12,7 @@ const useFetchImage = (id) => {
     markers: undefined,
     popup_data: undefined,
     image: {},
+    details: { header: "", copy: "" },
   };
 
   const [state, dispatch] = useReducer((state, action) => {
@@ -27,6 +28,7 @@ const useFetchImage = (id) => {
           image: action.payload.image,
           markers: action.payload.marker_positions,
           popup_data: action.payload.popups,
+          details: action.payload.details,
         };
 
       case "FETCH_ERROR":
@@ -56,7 +58,7 @@ const useFetchImage = (id) => {
             },
           });
           const [fetchedImage, popupContent] = ParseData(data.data);
-
+          console.log(data.data[0]);
           cache.current[id] = data;
 
           const imageData = {
@@ -67,6 +69,10 @@ const useFetchImage = (id) => {
               id: fetchedImage.id,
               name: fetchedImage.name,
               url: fetchedImage.url,
+            },
+            details: {
+              header: data.data[0]["page_header"],
+              copy: data.data[0]["page_copy"],
             },
           };
 

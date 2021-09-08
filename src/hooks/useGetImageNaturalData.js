@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 const useGetImageNaturalData = () => {
   const [loaded, setLoaded] = useState(false);
@@ -13,9 +13,9 @@ const useGetImageNaturalData = () => {
     setImageHeight(ref.current.height);
   };
 
-  const onLoad = () => {
+  const onLoad = useCallback(() => {
     setLoaded(true);
-  };
+  }, [loaded]);
 
   useEffect(() => {
     if (ref.current && ref.current.complete) {
@@ -31,7 +31,13 @@ const useGetImageNaturalData = () => {
     return () => {
       window.removeEventListener("resize", handleWindowSizeChange);
     };
-  });
+  }, [
+    onLoad,
+    setNaturalImageWidth,
+    setNaturalImageHeight,
+    setImageWidth,
+    setImageHeight,
+  ]);
 
   return [
     ref,
@@ -40,7 +46,7 @@ const useGetImageNaturalData = () => {
     naturalImageHeight,
     naturalImageWidth,
     imageWidth,
-    imageHeight
+    imageHeight,
   ];
 };
 

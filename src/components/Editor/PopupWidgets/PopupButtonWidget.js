@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
@@ -6,12 +6,9 @@ import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 function PopupButtonWidget(props) {
   const [readMode, setReadMode] = useState(true);
   const [showEditButton, setShowEditButton] = useState(false);
-  const [buttonText, setButtonText] = useState("");
   const [highlightedBackground, seHighlightedBackground] = useState(false);
-  const contentEditableRef = React.createRef();
   const [buttonUrlLink, setButtonUrlLink] = useState("https:google.com");
   const [initialButtonUrlBackup, setInitialButtonUrlBackup] = useState("");
-  const [initialButtonTextBackup, setInitialButtonTextBackup] = useState("");
   const [editorState, setEditorState] = useState({
     value: EditorState.createEmpty(),
   });
@@ -21,10 +18,6 @@ function PopupButtonWidget(props) {
     setEditorState({
       value: editorState,
     });
-  };
-
-  const handleChange = (e) => {
-    setButtonText(e.target.value);
   };
 
   const urlInputChange = (e) => {
@@ -48,10 +41,8 @@ function PopupButtonWidget(props) {
     };
     if (props.data.src !== null) {
       var button = JSON.parse(props.data.src);
-      setButtonText(button.buttonTextSrc);
       setButtonUrlLink(button.buttonUrlSrc);
       setInitialButtonUrlBackup(button.buttonUrlSrc);
-      setInitialButtonTextBackup(button.buttonTextSrc);
 
       setEditorState({
         value: EditorState.createWithContent(
@@ -62,9 +53,7 @@ function PopupButtonWidget(props) {
         EditorState.createWithContent(convertFromRaw(button.buttonTextSrc))
       );
     } else {
-      setButtonText("Some btn text");
       setInitialButtonUrlBackup("https://google.com");
-      setInitialButtonTextBackup("Click Here");
       setEditorState({
         value: EditorState.createWithContent(convertFromRaw(newButtonText)),
       });
@@ -148,7 +137,6 @@ function PopupButtonWidget(props) {
                 window.$("div[role=tooltip]").remove();
                 setReadMode(true);
 
-                setButtonText(initialButtonTextBackup);
                 setEditorState({ value: initialEditorState });
 
                 setButtonUrlLink(initialButtonUrlBackup);

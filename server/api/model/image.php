@@ -30,6 +30,8 @@ class Image
         // $query = "SELECT *  FROM  " . $this->table_name . " WHERE id = :image_id";
         $query = "SELECT Images.id AS Image_Id,
                     Images.url,
+                    Images.page_header,
+                    Images.page_copy,
                     Images.name,
                     Images.time,
                     Images.Stations_id,

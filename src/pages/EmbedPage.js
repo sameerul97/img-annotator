@@ -24,11 +24,12 @@ function EmbedPage(props) {
     naturalImageHeight,
     naturalImageWidth,
     imageWidth,
-    imageHeight
+    imageHeight,
   ] = useGetImageNaturalData();
 
-  const { status, image, markers, popup_data, error } = useFetchImage(id);
-
+  const { status, image, markers, popup_data, error, details } =
+    useFetchImage(id);
+  console.log(details);
   useEffect(() => props.setIsEmbedPage(true), [props]);
 
   function hotspotClicked(id) {
@@ -41,8 +42,8 @@ function EmbedPage(props) {
       type: ActionType.SET_SELECTED_POPUP,
       payload: {
         popup: popup_data.find((i) => i.id === id).popup_content,
-        selectedMarker: markers.find((i) => i.m_id === id)
-      }
+        selectedMarker: markers.find((i) => i.m_id === id),
+      },
     });
   }
 
@@ -88,19 +89,33 @@ function EmbedPage(props) {
     </React.Fragment>
   );
 
+  const PageDetails = (
+    <React.Fragment>
+      <div className="container text-left my-3 pl-md-0">
+        <div className="col-md-8 pl-md-0">
+          <h2>{details.header}</h2>
+          <p className="my-2">{details.copy}</p>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+
   return (
-    <EmbedPageContainer>
-      {status === "idle" && <EmbedLoading />}
-      {status === "error" && <div>{error}</div>}
-      {status === "fetching" && <EmbedLoading />}
-      {status === "fetched" && (
-        <React.Fragment>
-          {EmbedImage}
-          <HotspotWrap>{Hotspots}</HotspotWrap>
-          {PopupContainer}
-        </React.Fragment>
-      )}
-    </EmbedPageContainer>
+    <React.Fragment>
+      {status === "fetched" && PageDetails}
+      <EmbedPageContainer>
+        {status === "idle" && <EmbedLoading />}
+        {status === "error" && <div>{error}</div>}
+        {status === "fetching" && <EmbedLoading />}
+        {status === "fetched" && (
+          <React.Fragment>
+            {EmbedImage}
+            <HotspotWrap>{Hotspots}</HotspotWrap>
+            {PopupContainer}
+          </React.Fragment>
+        )}
+      </EmbedPageContainer>
+    </React.Fragment>
   );
 }
 
@@ -111,7 +126,7 @@ const HotspotWrap = ({ children }) => (
 );
 
 const EmbedPageContainer = ({ children }) => (
-  <div className="container embed-spacer px-0 text-center imageMarker position-relative" >
+  <div className="container embed-spacer px-0 text-center imageMarker position-relative">
     {children}
   </div>
 );

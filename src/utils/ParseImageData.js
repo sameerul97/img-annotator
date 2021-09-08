@@ -1,4 +1,4 @@
-import { Widgets, Widget_ID } from "../components/Widgets";
+import { Widget_ID } from "../components/Widgets";
 
 function ParseData(imageData) {
   const fetchedImage = {},
@@ -8,6 +8,8 @@ function ParseData(imageData) {
   fetchedImage["name"] = imageData[0]["name"];
   fetchedImage["id"] = imageData[0]["Image_Id"];
   fetchedImage["marker_positions"] = [];
+  fetchedImage["header"] = imageData[0]["page_header"];
+  fetchedImage["copy"] = imageData[0]["page_header"];
 
   const temp_markers = [];
   for (let i in imageData) {
@@ -41,12 +43,12 @@ function ParseData(imageData) {
           marker_image: imageData[j].marker_image,
           background_color: imageData[j].background_color,
           border_radius: imageData[j].border_radius,
-          popup_id: thisMarkerid
+          popup_id: thisMarkerid,
         };
 
         popupContent.push({
           id: thisMarkerid,
-          popup_content: []
+          popup_content: [],
         });
         break;
       }
@@ -70,7 +72,7 @@ function ParseData(imageData) {
           widget_type_id: imageData[h].widget_type_id,
           order_no: imageData[h].order_no,
           src: imageData[h].content,
-          marker_id: thisMarkerid
+          marker_id: thisMarkerid,
         });
       }
     }

@@ -10,7 +10,6 @@ function PopupCarouselWidget(props) {
   const [highlightedBackground, seHighlightedBackground] = useState(false);
   const [carouselData, setCarouselData] = useState(false);
 
-  const [thisWidgetId, setThisWidgetId] = useState("");
   const [arrLength, setArrLength] = useState();
   const [elRefs, setElRefs] = useState([]);
   const [newlyAdded, setnewlyAdded] = useState(false);
@@ -47,10 +46,9 @@ function PopupCarouselWidget(props) {
   useLayoutEffect(() => {
     setCarouselData(JSON.parse(props.data.src));
     setInitialCarouselState(JSON.parse(props.data.src));
-    setThisWidgetId(props.data.id);
 
     return () => {};
-  }, [props.data.src, props.data.id, setThisWidgetId]);
+  }, [props.data.src, props.data.id]);
 
   useEffect(() => {
     setElRefs((elRefs) =>
@@ -91,12 +89,8 @@ function PopupCarouselWidget(props) {
 
       // TODO: Rewrite with async behaviour once backend route is implemented
       setTimeout(() => {
-        console.log("slide being edited", editingRef.current);
-        console.log();
-
         editingRef.current.scrollIntoView({
-          behavior: "smooth",
-          // block: "center",
+          behavior: "smooth", 
           inline: "center",
         });
       }, 250);

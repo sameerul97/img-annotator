@@ -4,10 +4,12 @@ import { HashRouter, Link } from "react-router-dom";
 import "../../Marker.css";
 import { SERVER_APP_DOMAIN } from "../../helper";
 
+import Modal from "./Modal";
+
 const iconBgStyle = {
   background: "#2a85a5",
   padding: "10px",
-  borderRadius: "20px"
+  borderRadius: "20px",
 };
 
 function MarkerEditorPanel(props) {
@@ -64,6 +66,15 @@ function MarkerEditorPanel(props) {
         </div>
 
         <div className="smoothTransition col-7 order-1 order-md-1  px-0 py-2 py-md-0 my-auto text-md-right text-left">
+          <button
+            type="button"
+            className="btn btn-info "
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+          >
+            Edit Page info
+          </button>
+          <Modal imageId={props.imageId} header={props.header} copy={props.copy} />
           <PreviewButton imageId={props.imageId} />
           <Buttons
             enablePopupView={props.enablePopupView}
@@ -94,7 +105,9 @@ const CopyEmbedCodeButton = ({ imageId }) => {
         .attr("data-original-title", "Copy embed code")
         .tooltip("show");
     }, 2500);
-    navigator.clipboard.writeText(`<script src='${SERVER_APP_DOMAIN}/embed/index.php?id=${imageId}'></script>`);
+    navigator.clipboard.writeText(
+      `<script src='${SERVER_APP_DOMAIN}/embed/index.php?id=${imageId}'></script>`
+    );
   }
 
   return (

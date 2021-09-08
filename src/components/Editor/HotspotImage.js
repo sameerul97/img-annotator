@@ -14,17 +14,12 @@ import PopupWidgets from "./PopupWidgets";
 import API from "../../api";
 
 import { DragDropContext } from "react-beautiful-dnd";
-import { Widgets, Widget_ID } from "../Widgets";
+import { Widgets } from "../Widgets";
 import useGetImageNaturalData from "../../hooks/useGetImageNaturalData";
 
 function HotspotImageEditor(props) {
   const itemsRef = useRef([]);
-  const editMarkerRef = useRef(false);
-  const deleteMarkerRef = useRef(false);
-  // TODO: Remove widgetPanelref (testing required)
-  const widgetPanelRef = useRef(false);
-  // const [widgetPanelWidth, setWidgetPanelWidth] = useState(false);
-  // const [widgetPanelHeight, setWidgetPanelHeight] = useState(false);
+
   const DraggableElement = ".item-point";
 
   const [imageNotFoundError, setImageNotFoundError] = useState(false);
@@ -35,6 +30,7 @@ function HotspotImageEditor(props) {
   const [errorMessage, setErrorMessage] = useState(false);
 
   const [loaded, setLoaded] = useState(false);
+
   // image state holds all the markers
   const [image, setImage] = useState({});
   const [popups, setPopups] = useState(false);
@@ -71,7 +67,7 @@ function HotspotImageEditor(props) {
     naturalImageHeight,
     naturalImageWidth,
     imageWidth,
-    imageHeight
+    imageHeight,
   ] = useGetImageNaturalData();
 
   function updateMarkerTopAndLeft(marker_index, left, top) {
@@ -83,12 +79,12 @@ function HotspotImageEditor(props) {
             return {
               ...marker,
               top: top,
-              left: left
+              left: left,
             };
           } else {
             return marker;
           }
-        })
+        }),
       };
     });
   }
@@ -97,13 +93,13 @@ function HotspotImageEditor(props) {
     API.post(
       `/marker/index.php`,
       {
-        image_id: parseInt(image.id)
+        image_id: parseInt(image.id),
       },
       {
         headers: {
           "content-type": "multipart/form-data",
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       }
     )
       .then((res) => {
@@ -122,13 +118,13 @@ function HotspotImageEditor(props) {
           marker_image: new_marker.marker_image,
           background_color: new_marker.background_color,
           border_radius: new_marker.border_radius,
-          popup_id: parseInt(new_marker.id)
+          popup_id: parseInt(new_marker.id),
         };
 
         setImage((prevState) => {
           return {
             ...prevState,
-            marker_positions: [...prevState.marker_positions, temp_new_marker]
+            marker_positions: [...prevState.marker_positions, temp_new_marker],
           };
         });
 
@@ -139,7 +135,7 @@ function HotspotImageEditor(props) {
             id: new_popup.popup_content[h].id,
             widget_type_id: new_popup.popup_content[h].widget_type_id,
             src: new_popup.popup_content[h].content,
-            marker_id: new_marker.id
+            marker_id: new_marker.id,
           });
         }
         new_popup["popup_content"] = temp_popup_contents;
@@ -215,12 +211,12 @@ function HotspotImageEditor(props) {
           if (parseInt(marker.m_id) === parseInt(selectedMarker.markerId)) {
             return {
               ...marker,
-              color: color.hex
+              color: color.hex,
             };
           } else {
             return marker;
           }
-        })
+        }),
       };
     });
   };
@@ -230,11 +226,11 @@ function HotspotImageEditor(props) {
       API.delete("/marker/index.php", {
         data: {
           marker_id: parseInt(selectedMarker.markerId),
-          popup_id: parseInt(selectedMarker.popupId)
+          popup_id: parseInt(selectedMarker.popupId),
         },
         headers: {
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       })
         .then((res) => {
           /**
@@ -242,7 +238,7 @@ function HotspotImageEditor(props) {
            * once its deleted on db */
 
           setPopupToBeDeleted({
-            popupId: parseInt(selectedMarker.popupId)
+            popupId: parseInt(selectedMarker.popupId),
           });
 
           setImage((prevState) => {
@@ -250,7 +246,7 @@ function HotspotImageEditor(props) {
               ...prevState,
               marker_positions: prevState.marker_positions.filter(
                 (marker) => marker.m_id !== parseInt(selectedMarker.markerId)
-              )
+              ),
             };
           });
 
@@ -296,11 +292,11 @@ function HotspotImageEditor(props) {
     try {
       var res = await await API.get(`/image/index.php`, {
         params: {
-          image_id: parseInt(id)
+          image_id: parseInt(id),
         },
         headers: {
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       });
 
       const [fetchedImage, popupContent] = ParseData(res.data);
@@ -333,10 +329,10 @@ function HotspotImageEditor(props) {
         autoScroll: true,
         modifiers: [
           interact.modifiers.restrictRect({
-            restriction: "parent"
-          })
+            restriction: "parent",
+          }),
         ],
-        onmove: dragMoveListener
+        onmove: dragMoveListener,
       })
       .on("dragend", dragEndListener);
 
@@ -349,16 +345,6 @@ function HotspotImageEditor(props) {
 
   const updateMarkersPosition = () => {
     Marker.positionMarkers(itemsRef);
-  };
-
-  const handleClickInside = (e) => {
-    if (
-      !itemsRef.current.includes(e.target) &&
-      !editMarkerRef.current.contains(e.target) &&
-      !deleteMarkerRef.current.contains(e.target)
-    ) {
-      setSelectedMarker(false);
-    }
   };
 
   const imageClick = (e) => {
@@ -436,12 +422,12 @@ function HotspotImageEditor(props) {
         `/marker/index.php`,
         {
           image_id: parseInt(image.id),
-          markers: image
+          markers: image,
         },
         {
           headers: {
-            Authorization: localStorage.getItem("token")
-          }
+            Authorization: localStorage.getItem("token"),
+          },
         }
       )
         .then((res) => {
@@ -512,8 +498,8 @@ function HotspotImageEditor(props) {
       API.post(`/popup_widget/update_image.php`, formData, {
         headers: {
           "content-type": "multipart/form-data",
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       })
         .then((res) => {
           // TODO: Abstract away setPopups into function called updatePopups and
@@ -530,13 +516,13 @@ function HotspotImageEditor(props) {
                       if (popup_content_widget.id === popup_widget_id) {
                         return {
                           ...popup_content_widget,
-                          src: res.data
+                          src: res.data,
                         };
                       } else {
                         return popup_content_widget;
                       }
                     }
-                  )
+                  ),
                 };
               } else {
                 return popup;
@@ -580,13 +566,13 @@ function HotspotImageEditor(props) {
           marker_id: parseInt(popupModeMarkerSelected.markerId),
           popup_widget_id: popup_widget_id,
           content: content,
-          widget_type_id: widget_type_id
+          widget_type_id: widget_type_id,
         },
         {
           headers: {
             "content-type": "multipart/form-data",
-            Authorization: localStorage.getItem("token")
-          }
+            Authorization: localStorage.getItem("token"),
+          },
         }
       )
         .then((res) => {
@@ -636,13 +622,13 @@ function HotspotImageEditor(props) {
                 if (popup_content_widget.id === popup_widget_id) {
                   return {
                     ...popup_content_widget,
-                    src: content
+                    src: content,
                   };
                 } else {
                   return popup_content_widget;
                 }
               }
-            )
+            ),
           };
         } else {
           return popup;
@@ -664,8 +650,8 @@ function HotspotImageEditor(props) {
         params: {
           popup_widget_id: parseInt(popup_widget_id),
           marker_id: parseInt(parseInt(popupModeMarkerSelected.markerId)),
-          imageSlide: isImageSlide
-        }
+          imageSlide: isImageSlide,
+        },
       });
 
       // TODO: Abstract away setPopups into function called updatePopups and
@@ -682,13 +668,13 @@ function HotspotImageEditor(props) {
                   if (popup_content_widget.id === popup_widget_id) {
                     return {
                       ...popup_content_widget,
-                      src: JSON.stringify(slideCreated.data)
+                      src: JSON.stringify(slideCreated.data),
                     };
                   } else {
                     return popup_content_widget;
                   }
                 }
-              )
+              ),
             };
           } else {
             return popup;
@@ -738,8 +724,8 @@ function HotspotImageEditor(props) {
         {
           headers: {
             "content-type": "multipart/form-data",
-            Authorization: localStorage.getItem("token")
-          }
+            Authorization: localStorage.getItem("token"),
+          },
         }
       );
 
@@ -761,13 +747,13 @@ function HotspotImageEditor(props) {
                   if (popup_content_widget.id === popup_widget_id) {
                     return {
                       ...popup_content_widget,
-                      src: JSON.stringify(ordered_carousel_slides)
+                      src: JSON.stringify(ordered_carousel_slides),
                     };
                   } else {
                     return popup_content_widget;
                   }
                 }
-              )
+              ),
             };
           } else {
             return popup;
@@ -802,8 +788,8 @@ function HotspotImageEditor(props) {
         data: {
           popup_widget_id: parseInt(popup_widget_id),
           marker_id: parseInt(parseInt(popupModeMarkerSelected.markerId)),
-          slide_id: slide_id
-        }
+          slide_id: slide_id,
+        },
       });
 
       // TODO: Abstract away setPopups into function called updatePopups and
@@ -820,13 +806,13 @@ function HotspotImageEditor(props) {
                   if (popup_content_widget.id === popup_widget_id) {
                     return {
                       ...popup_content_widget,
-                      src: JSON.stringify(slideCreated.data)
+                      src: JSON.stringify(slideCreated.data),
                     };
                   } else {
                     return popup_content_widget;
                   }
                 }
-              )
+              ),
             };
           } else {
             return popup;
@@ -853,13 +839,13 @@ function HotspotImageEditor(props) {
         marker_id: parseInt(popupModeMarkerSelected.markerId),
         popup_widget_id: popup_widget_id,
         content: content,
-        widget_type_id: widget_type_id
+        widget_type_id: widget_type_id,
       },
       {
         headers: {
           "content-type": "multipart/form-data",
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       }
     );
 
@@ -883,13 +869,13 @@ function HotspotImageEditor(props) {
                 if (popup_content_widget.id === popup_widget_id) {
                   return {
                     ...popup_content_widget,
-                    src: JSON.stringify(ordered_carousel_slides)
+                    src: JSON.stringify(ordered_carousel_slides),
                   };
                 } else {
                   return popup_content_widget;
                 }
               }
-            )
+            ),
           };
         } else {
           return popup;
@@ -929,7 +915,7 @@ function HotspotImageEditor(props) {
       id: draggedEl.id + "_" + widget_uid(),
       widget_type_id: draggedEl.id,
       src: null,
-      marker_id: popupModeMarkerSelected.markerid
+      marker_id: popupModeMarkerSelected.markerid,
     };
 
     destClone.splice(droppableDestination.index, 0, draggedEl);
@@ -945,12 +931,12 @@ function HotspotImageEditor(props) {
         image_id: parseInt(image.id),
         marker_id: parseInt(popupModeMarkerSelected.markerId),
         widget_type_id: draggedEl.widget_type_id,
-        react_widget_id: draggedEl.id
+        react_widget_id: draggedEl.id,
       },
       {
         headers: {
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       }
     )
       .then((res) => {
@@ -973,13 +959,13 @@ function HotspotImageEditor(props) {
                         id: new_id,
                         widget_type_id: res.data.widget_type_id,
                         src: res.data.src,
-                        marker_id: popupModeMarkerSelected.markerId
+                        marker_id: popupModeMarkerSelected.markerId,
                       };
                     } else {
                       return content;
                     }
                   }
-                )
+                ),
               };
             } else {
               return popup;
@@ -1032,7 +1018,7 @@ function HotspotImageEditor(props) {
                 popup.popup_content,
                 source.index,
                 destination.index
-              )
+              ),
             };
           } else {
             return popup;
@@ -1044,7 +1030,6 @@ function HotspotImageEditor(props) {
     // Moving between columns
     //  adding new widget
     else {
-      console.log(popupModeMarkerSelected);
       setPopups(function (prevState) {
         return prevState.map((popup, index) => {
           if (
@@ -1058,7 +1043,7 @@ function HotspotImageEditor(props) {
                 draggableId,
                 source,
                 destination
-              ).droppable2
+              ).droppable2,
             };
           } else {
             return popup;
@@ -1085,7 +1070,6 @@ function HotspotImageEditor(props) {
               <div
                 className="text-left rounded-right col-3 smoothTransition pl-0  pr-0 "
                 id="widgetPanel"
-                ref={widgetPanelRef}
               >
                 <div
                   className={`text-left bg-info rounded-right px-0 smoothTransition h-100 ${
@@ -1116,8 +1100,6 @@ function HotspotImageEditor(props) {
                 <MarkerEditorPanel
                   selectedMarker={selectedMarker}
                   addNewMarker={addNewMarker}
-                  editRef={editMarkerRef}
-                  deleteRef={deleteMarkerRef}
                   deleteMarker={deleteMarker}
                   popupViewEnabled={popupView}
                   enablePopupView={enablePopupView}
@@ -1125,6 +1107,8 @@ function HotspotImageEditor(props) {
                   popupEditMode={popupEditMode}
                   saveData={saveData}
                   imageId={image.id}
+                  header={image.header}
+                  copy={image.copy}
                 />
                 <div
                   className="imageMarker shadow-lg"
@@ -1195,7 +1179,7 @@ function HotspotImageEditor(props) {
                               }
                               positions={{
                                 top: image.marker_positions[index].top,
-                                left: image.marker_positions[index].left
+                                left: image.marker_positions[index].left,
                               }}
                               newWidgetBeingAdded={newWidgetBeingAdded}
                               addASlideInCarousel={addASlideInCarousel}
