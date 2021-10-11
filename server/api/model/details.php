@@ -27,6 +27,7 @@ class Details
         SET
             page_header = :page_header,
             page_copy = :page_copy,
+            page_script = :page_script,
             last_modified = :last_modified
         WHERE id = :image_id";
 
@@ -35,6 +36,7 @@ class Details
 
         $stmt->bindParam(':page_header', $data->header);
         $stmt->bindParam(':page_copy', $data->copy);
+        $stmt->bindParam(':page_script', $data->script);
         $stmt->bindParam(':image_id', $data->image_id);
         $stmt->bindParam(':last_modified', $date);
 

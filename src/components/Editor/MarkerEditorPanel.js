@@ -1,8 +1,7 @@
 import React, { useState, useRef } from "react";
 import { HashRouter, Link } from "react-router-dom";
 
-import "../../Marker.css";
-import { SERVER_APP_DOMAIN } from "../../helper";
+import { APP_DOMAIN, SERVER_APP_DOMAIN } from "../../utils/helper.js";
 
 import Modal from "./Modal";
 
@@ -62,6 +61,7 @@ function MarkerEditorPanel(props) {
               ></i>
             </a>
             <CopyEmbedCodeButton imageId={props.imageId} />
+            <CopyIframeSrcButton imageId={props.imageId} />
           </div>
         </div>
 
@@ -74,7 +74,12 @@ function MarkerEditorPanel(props) {
           >
             Edit Page info
           </button>
-          <Modal imageId={props.imageId} header={props.header} copy={props.copy} />
+          <Modal
+            imageId={props.imageId}
+            header={props.header}
+            copy={props.copy}
+            script={props.script}
+          />
           <PreviewButton imageId={props.imageId} />
           <Buttons
             enablePopupView={props.enablePopupView}
@@ -86,6 +91,46 @@ function MarkerEditorPanel(props) {
     </>
   );
 }
+
+const CopyIframeSrcButton = ({ imageId }) => {
+  const toolTipRef = useRef(null);
+  const [toolTipState, setToolTipState] = useState("Copy Iframe code");
+
+  function copyEmbedCodeIntoClipBoard(e) {
+    e.preventDefault();
+
+    window
+      .$("#CopyIframeSrcButton")
+      .attr("data-original-title", "Copied to clipboard!")
+      .tooltip("show");
+
+    setTimeout(() => {
+      window
+        .$("#CopyIframeSrcButton")
+        .attr("data-original-title", "Copy Iframe url")
+        .tooltip("show");
+    }, 2500);
+    navigator.clipboard.writeText(
+      `${APP_DOMAIN}/embed/${imageId}`
+    );
+  }
+
+  return (
+    <button
+      className="smoothTransition btn btn-sm shadow-none"
+      data-toggle="tooltip"
+      data-placement="top"
+      title={toolTipState}
+      onClick={copyEmbedCodeIntoClipBoard}
+      aria-disabled="true"
+      data-tooltipdata={toolTipState}
+      ref={toolTipRef}
+      id="CopyIframeSrcButton"
+    >
+      <i className="text-white far fa-file-code fa-1x" style={iconBgStyle}></i>
+    </button>
+  );
+};
 
 const CopyEmbedCodeButton = ({ imageId }) => {
   const toolTipRef = useRef(null);

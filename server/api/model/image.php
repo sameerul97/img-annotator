@@ -32,6 +32,7 @@ class Image
                     Images.url,
                     Images.page_header,
                     Images.page_copy,
+                    Images.page_script,
                     Images.name,
                     Images.time,
                     Images.Stations_id,
@@ -107,6 +108,92 @@ class Image
         }
     }
 
+    function getImagesBySearch($data)
+    {
+        $page_no = intval($data['page_no']);
+
+        $images_per_page = 5;
+        $offset = ($page_no * $images_per_page) - $images_per_page;
+
+        $sql = "SELECT COUNT(*) FROM " . $this->table_name;
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $number_of_rows = $stmt->fetchColumn();
+
+        $images = [];
+        $images["total_pages"] =  ceil($number_of_rows / $images_per_page);
+        $images["images"] = [];
+
+        $sql = "SELECT *  FROM " . $this->table_name . " WHERE deleted = 0  LIMIT " . $images_per_page . " OFFSET " . $offset;
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($results as $row) {
+            array_push($images["images"], (object)[
+                'id' => $row['id'],
+                'url' => $this->baseUrl . $row['url'],
+                'name' => $row['name']
+            ]);
+        }
+
+        echo json_encode($images);
+    }
+
+    function getImages($data)
+    {
+        $page_no = intval($data['page_no']);
+
+        if ($page_no <= 0) {
+            $page_no = 1;
+        }
+
+        $search_query = $data['image_name'];
+        $search_query = str_replace(['"', "'"], "", $search_query);
+        $search_query = strtolower($search_query);
+
+        $single_quote = '"\'"';
+        $empty_string = '""';
+
+        $images_per_page = 5;
+        $offset = ($page_no * $images_per_page) - $images_per_page;
+
+        $sql = "SELECT COUNT(*) FROM " . $this->table_name . " WHERE deleted = 0  AND lower(REPLACE(search_name,  {$single_quote} ,  {$empty_string})) LIKE '%" . $search_query . "%'";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $number_of_rows = $stmt->fetchColumn();
+
+        $images = [];
+        $total_pages = ceil($number_of_rows / $images_per_page);
+
+        if ($number_of_rows > 0 && $total_pages <= 0) {
+            $images["total_pages"] =  1;
+        } else {
+            $images["total_pages"] =  $total_pages;
+        }
+
+        $images["images"] = [];
+
+        $sql = "SELECT *  FROM " . $this->table_name . " WHERE deleted = 0  AND lower(REPLACE(search_name,  {$single_quote} ,  {$empty_string})) LIKE '%" . $search_query . "%' LIMIT " . $images_per_page . " OFFSET " . $offset;
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($results as $row) {
+            array_push($images["images"], (object)[
+                'id' => $row['id'],
+                'url' => $this->baseUrl . $row['url'],
+                'name' => $row['name']
+            ]);
+        }
+
+        echo json_encode($images);
+    }
+
     function getAllImages()
     {
         $sql = "SELECT *  FROM " . $this->table_name . " WHERE deleted = 0 ";
@@ -143,6 +230,7 @@ class Image
         SET
             url = :url,
             name = :name,
+            search_name = :search_name,
             time = :time,
             deleted = 0,
             Stations_id = :Stations_id,
@@ -155,11 +243,13 @@ class Image
         $Stations_id = intval($data['Stations_id']);
         $Users_id = intval($data['Users_id']);
         $date = date("Y-m-d H:i:s");
+        $search_name = strtolower($data['name']);
 
         $stmt->bindParam(':name', $data['name']);
         $stmt->bindParam(':time', $date);
         $stmt->bindParam(':Stations_id', $Stations_id);
         $stmt->bindParam(':Users_id', $Users_id);
+        $stmt->bindParam(':search_name', $search_name);
 
         $target_dir = "../user_images/";
         $target_file =  str_replace(' ', '', time() . rand(11, 99) . basename($_FILES["image"]["name"]));

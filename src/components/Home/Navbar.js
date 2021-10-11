@@ -1,11 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { HashRouter } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { ViewAllImages } from "../../store/All_Images/actions-creators/index.ts";
 
 function Navbar(props) {
+  const dispatch = useDispatch();
 
   const logOut = () => {
     props.logout();
+  };
+
+  const onViewAllImages = () => {
+    dispatch(ViewAllImages());
   };
 
   return (
@@ -31,27 +38,36 @@ function Navbar(props) {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav mr-auto">
             <NavBarLinkButton name="Home" to="/" />
-            {
-              props.userLoggedIn ? (
-                <React.Fragment>
-                  <NavBarLinkButton name="View All" to="/image" />
-                  <NavBarLinkButton name="Create" to="/create" />
-                  <NavBarLinkButton name="Dashboard" to="/dashboard" />
-                </React.Fragment>
-              ) : null
-            }
-            {
-              props.isDemo ? (
-                <React.Fragment>
-                  <NavBarLinkButton name="View All" to="/images" />
-                </React.Fragment>
-              ) : null
-            }
+            {props.userLoggedIn ? (
+              <React.Fragment>
+                <NavBarLinkButton
+                  name="View All"
+                  onclickcallback={onViewAllImages}
+                  to="/image"
+                />
+                <NavBarLinkButton name="Create" to="/create" />
+                <NavBarLinkButton name="Dashboard" to="/dashboard" />
+                <NavBarLinkButton name="Editor" to="/editor" />
+              </React.Fragment>
+            ) : null}
+            {props.isDemo ? (
+              <React.Fragment>
+                <NavBarLinkButton name="View All" to="/images" />
+              </React.Fragment>
+            ) : null}
           </ul>
 
           <ul className="navbar-nav ml-auto">
-            {(!props.userLoggedIn && !props.isDemo) ? <NavBarLinkButton name="Login" to="/login" /> : null}
-            {props.userLoggedIn && <NavBarLinkButton name="Logout" to="/login" onclickcallback={logOut} />}
+            {!props.userLoggedIn && !props.isDemo ? (
+              <NavBarLinkButton name="Login" to="/login" />
+            ) : null}
+            {props.userLoggedIn && (
+              <NavBarLinkButton
+                name="Logout"
+                to="/login"
+                onclickcallback={logOut}
+              />
+            )}
           </ul>
         </div>
       </nav>
@@ -73,6 +89,6 @@ const NavBarLinkButton = ({ name, to, onclickcallback = false }) => {
       </NavLink>
     </li>
   );
-}
+};
 
 export default Navbar;

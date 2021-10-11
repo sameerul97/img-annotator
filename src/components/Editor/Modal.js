@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import API from "../../api";
+import API from "../../api/index";
 
 export default function Modal(props) {
   const image_id = props.imageId;
   const [header, setHeader] = useState("");
   const [copy, setCopy] = useState("");
+  const [script, setScript] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
@@ -18,10 +19,15 @@ export default function Modal(props) {
     setHeader(event.target.value);
   };
 
+  const onScriptChange = (event) => {
+    setScript(event.target.value);
+  };
+
   useEffect(() => {
-    setHeader(props.header);
-    setCopy(props.copy);
-  }, [props.copy, props.header]);
+    setHeader(props.header || "");
+    setCopy(props.copy || "");
+    setScript(props.script || "");
+  }, [props.copy, props.header, props.script]);
 
   const saveHeaderAndCopy = () => {
     API.put(
@@ -29,6 +35,7 @@ export default function Modal(props) {
       {
         header: header,
         copy: copy,
+        script: script,
         image_id: image_id,
       },
       {
@@ -103,7 +110,7 @@ export default function Modal(props) {
   );
 
   const DataInput = (
-    <div className="input-group">
+    <div className="input-group mb-3">
       <div className="input-group-prepend">
         <span className="input-group-text bg-secondary">Body Text</span>
       </div>
@@ -113,6 +120,20 @@ export default function Modal(props) {
         aria-label="With textarea"
         value={copy}
         onChange={onCopyChange}
+      />
+    </div>
+  );
+
+  const ScriptInput = (
+    <div className="input-group">
+      <div className="input-group-prepend">
+        <span className="input-group-text bg-secondary">Wayin embed code</span>
+      </div>
+      <textarea
+        className="form-control"
+        aria-label="With textarea"
+        value={script}
+        onChange={onScriptChange}
       />
     </div>
   );
@@ -167,6 +188,7 @@ export default function Modal(props) {
           <div className="modal-body">
             {HeaderInput}
             {DataInput}
+            {ScriptInput}
             {Alerts}
           </div>
           <div className="modal-footer">

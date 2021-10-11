@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import $ from "jquery";
-import "../../Marker.css";
+import "../../css/Marker.css";
 import Marker from "../../lib/Marker";
 import interact from "interactjs";
-import { ParseData } from "../../utils/ParseImageData";
+import { ParseData } from "../../utils/ParseImageData.ts";
 
 import Markers from "./Marker";
 import Popup from "./Popup";
@@ -11,11 +11,11 @@ import MarkerEditorPanel from "./MarkerEditorPanel";
 import ColorPicker from "./ColorPicker";
 import Toast from "./Toast";
 import PopupWidgets from "./PopupWidgets";
-import API from "../../api";
+import API from "../../api/index";
 
 import { DragDropContext } from "react-beautiful-dnd";
 import { Widgets } from "../Widgets";
-import useGetImageNaturalData from "../../hooks/useGetImageNaturalData";
+import useGetImageNaturalData from "../../hooks/useGetImageNaturalData.ts";
 
 function HotspotImageEditor(props) {
   const itemsRef = useRef([]);
@@ -54,7 +54,7 @@ function HotspotImageEditor(props) {
   // Show warning message -> when popup is already opened and clicking another popup marker
   const [showToast, setShowToast] = useState(false);
 
-  // new widget being added in db
+  // new widget being added in db. if true, disable widget panel dragging ui
   const [newWidgetBeingAdded, setNewWidgetBeingAdded] = useState(false);
 
   // if image is portrait
@@ -1109,6 +1109,7 @@ function HotspotImageEditor(props) {
                   imageId={image.id}
                   header={image.header}
                   copy={image.copy}
+                  script={image.script}
                 />
                 <div
                   className="imageMarker shadow-lg"

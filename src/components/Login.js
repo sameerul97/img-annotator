@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import API from "../api";
+import API from "../api/index";
 import { useHistory } from "react-router-dom";
 
 function Login(props) {

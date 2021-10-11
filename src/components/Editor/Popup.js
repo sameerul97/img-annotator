@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 import Marker from "../../lib/Marker";
-import "../../Marker.css";
 
 import { ReactComponent as DragLogo } from "../../assets/drag.svg";
 
@@ -16,7 +15,7 @@ import PopupButtonWidget from "./PopupWidgets/PopupButtonWidget";
 import PopupFreeTextWidget from "./PopupWidgets/PopupFreeTextWidget";
 import PopupCarouselWidget from "./PopupWidgets/PopupCarouselWidget";
 
-import API from "../../api";
+import API from "../../api/index";
 
 const grid = 6;
 

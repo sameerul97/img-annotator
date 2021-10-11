@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CirclePicker } from "react-color";
 
-import "../../Marker.css";
-
 function ColorPicker(props) {
   const [showColorPanel, setShowColorPanel] = useState(false);
 

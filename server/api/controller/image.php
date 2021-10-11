@@ -15,6 +15,24 @@ class ImageController
 {
     public $id;
 
+    public function getImages()
+    {
+        $v = new Valitron\Validator($_GET);
+        $v->rule('required', ['page_no']);
+        $v->rule('integer', 'page_no');
+
+        if ($v->validate()) {
+            $tl = new Image();
+    
+            return $tl->getImages($_GET);
+        } else {
+            return json_encode(array(
+                "error" => $v->errors(),
+                "message" => null,
+            ));
+        }
+    }
+
     public function getImage()
     {
         $v = new Valitron\Validator($_GET);

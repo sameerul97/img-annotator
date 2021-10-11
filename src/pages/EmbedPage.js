@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import "../Marker.css";
+import "../css/Marker.css";
 import { ActionType } from "../store/Embed/action-types";
 import { EmbedContext } from "../store/Embed";
 
-import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
-import useFetchImage from "../hooks/useFetchImage";
+import useGetImageNaturalData from "../hooks/useGetImageNaturalData.ts";
+import useFetchImage from "../hooks/useFetchImage.ts";
+import useScript from "../hooks/useScript";
 
 import Popup from "../components/Embed/Popup.tsx";
 import Hotspot from "../components/Embed/Hotspot.tsx";
@@ -29,7 +30,21 @@ function EmbedPage(props) {
 
   const { status, image, markers, popup_data, error, details } =
     useFetchImage(id);
-  console.log(details);
+
+  // if (status === "fetched") {
+  // useScript(
+  //   "https://xd.wayin.com/embed/e8ddc6fa-abc5-4af6-a796-540a61c17cb1?mode=responsive",
+  //   "#embedContainer",
+  //   true
+  // );
+
+  useEffect(() => {
+    // var script =
+    //   '<script src="https://xd.wayin.com/embed/76b00206-1266-4e09-8050-6efd71db8444?mode=responsive"></script>';
+
+    window.postscribe("#embedContainer", details.script);
+  }, [details.script]);
+
   useEffect(() => props.setIsEmbedPage(true), [props]);
 
   function hotspotClicked(id) {
@@ -92,9 +107,9 @@ function EmbedPage(props) {
   const PageDetails = (
     <React.Fragment>
       <div className="container text-left my-3 pl-md-0">
-        <div className="col-md-8 pl-md-0">
-          <h2>{details.header}</h2>
-          <p className="my-2">{details.copy}</p>
+        <div className="col-md-10 pl-md-0">
+          <h2 style={{"fontWeight": "300"}}>{details.header}</h2>
+          <p className="my-2" style={{"fontWeight": "200"}}>{details.copy}</p>
         </div>
       </div>
     </React.Fragment>
@@ -115,11 +130,18 @@ function EmbedPage(props) {
           </React.Fragment>
         )}
       </EmbedPageContainer>
+      <EmbedFormContainer />
     </React.Fragment>
   );
 }
 
 export default EmbedPage;
+
+const EmbedFormContainer = ({ children }) => (
+  <div className="container bg-dark my-5" id="embedContainer">
+    {children}
+  </div>
+);
 
 const HotspotWrap = ({ children }) => (
   <div className="points_wrap">{children}</div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import "../../Marker.css";
 
 const Markers = React.forwardRef((props, ref) => {
   const [showBorder, setShowBorder] = useState(false);

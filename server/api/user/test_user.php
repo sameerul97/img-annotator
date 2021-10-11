@@ -9,7 +9,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET':
         echo  json_encode(array(
-            "message" => "User.php get",
+            "message" => "User.php get " . ceil(3.75),
             "param" => $_GET["param"],
             "param2" => $_GET["param2"],
         ));

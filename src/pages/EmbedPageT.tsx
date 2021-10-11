@@ -3,9 +3,9 @@ import { Dispatch, SetStateAction } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-import "../Marker.css";
+import "../css/Marker.css";
 
-import API from "../api";
+import API from "../api/index";
 import useGetImageNaturalData from "../hooks/useGetImageNaturalData";
 import { ParseData } from "../utils/ParseImageData";
 
