@@ -30,7 +30,7 @@ password: test
   - [x] Image and Video widget
   - [x] Text (includes header, body, free text)
   - [x] Button (edit text and link out to external sources)
-  - [x]Carousel Widget
+  - [x] Carousel Widget
     - [x] User can reorder slides via drag and drop
     - [x] User can add video / image slide
     - [x] User can edit each slide data (image, video and caption)
