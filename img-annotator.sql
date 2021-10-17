@@ -1,158 +1,270 @@
-CREATE DATABASE `Img-annotator`;
+-- Adminer 4.7.7 MySQL dump
 
-CREATE TABLE `Img-annotator`.`Users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS `Images`;
+CREATE TABLE `Images` (
+  `page_script` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `page_header` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `page_copy` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  `Stations_id` int NOT NULL,
+  `Users_id` int NOT NULL,
+  `last_modified` datetime DEFAULT NULL,
+  `deleted` tinyint DEFAULT NULL,
+  `search_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`id`,`Users_id`),
+  KEY `fk_Images_Stations1_idx` (`Stations_id`),
+  KEY `fk_Images_Users1_idx` (`Users_id`),
+  CONSTRAINT `fk_Images_Stations1` FOREIGN KEY (`Stations_id`) REFERENCES `Stations` (`id`),
+  CONSTRAINT `fk_Images_Users1` FOREIGN KEY (`Users_id`) REFERENCES `Users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `Images` (`page_script`, `page_header`, `page_copy`, `id`, `url`, `name`, `time`, `Stations_id`, `Users_id`, `last_modified`, `deleted`, `search_name`) VALUES
+('<script src=\"https://xd.wayin.com/embed/76b00206-1266-4e09-8050-6efd71db8444?mode=responsive\"></script>',	'Test',	'Test',	3,	'161132036832photo-1579126898112-0ea5054a86f6.jpeg',	'Shoe',	'2021-01-22 12:59:28',	1,	1,	'2021-09-09 10:41:54',	0,	'shoe'),
+('',	'',	'',	4,	'161132069020photo-1611089384597-c4eaa6a19fef(1).jpeg',	'Test',	'2021-01-22 13:04:50',	3,	1,	NULL,	0,	'test'),
+('',	'',	'',	8,	'161133306926photo-1611077855004-cc0614011bd8.jpeg',	'Test',	'2021-01-22 16:31:09',	1,	1,	NULL,	0,	'test'),
+('',	'',	'',	16,	'161184955763samsung.gif',	'samsung ',	'2021-01-28 15:59:17',	1,	1,	NULL,	0,	'samsung'),
+('',	'',	'',	17,	'161185315432ezgif-6-1f467db0ae52.jpg',	'webp test',	'2021-01-28 16:59:14',	3,	1,	NULL,	0,	'webp test'),
+(NULL,	NULL,	NULL,	18,	'163344873441carousel_img_1.jpeg',	'Nando\'s',	'2021-10-05 16:45:34',	1,	1,	NULL,	0,	'nando\'s'),
+(NULL,	NULL,	NULL,	19,	'163344877778carousel_img_2.jpg',	'Nando\'s 2',	'2021-10-05 16:46:17',	3,	1,	NULL,	0,	'nando\'s 2'),
+(NULL,	NULL,	NULL,	20,	'163344886978header.jpg',	'Venom',	'2021-10-05 16:47:49',	1,	1,	NULL,	0,	'venom'),
+(NULL,	'Free Guy',	NULL,	21,	'163344900752board.jpeg',	'Free Guy',	'2021-10-05 16:50:07',	3,	1,	'2021-10-05 18:08:10',	0,	'free guy'),
+(NULL,	NULL,	NULL,	22,	'163344926512header0.jpg',	'Covent Garden Image 1',	'2021-10-05 16:54:25',	1,	1,	NULL,	0,	'covent garden image 1'),
+(NULL,	NULL,	NULL,	23,	'163344928074header1.jpg',	'Covent Garden Xmas',	'2021-10-05 16:54:40',	3,	1,	NULL,	0,	'covent garden xmas'),
+(NULL,	NULL,	NULL,	24,	'163344934968juliet_sept_header_2.jpeg',	'&Juliet',	'2021-10-05 16:55:49',	1,	1,	NULL,	0,	'&juliet'),
+(NULL,	NULL,	NULL,	25,	'163368705794curt4.png',	'John Lewis',	'2021-10-08 10:57:37',	1,	1,	NULL,	0,	'john lewis'),
+(NULL,	NULL,	NULL,	26,	'163381541337talkmobile_desktop_2.png',	'Talk Mobile',	'2021-10-09 22:36:53',	1,	1,	NULL,	0,	'talk mobile');
+
+DROP TABLE IF EXISTS `Markers`;
+CREATE TABLE `Markers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `markerTop` varchar(255) DEFAULT NULL,
+  `markerLeft` varchar(255) DEFAULT NULL,
+  `color` varchar(45) DEFAULT NULL,
+  `animation_type` varchar(45) DEFAULT NULL,
+  `marker_type` varchar(45) DEFAULT NULL,
+  `Images_id` int NOT NULL,
+  `marker_image` varchar(255) DEFAULT NULL,
+  `background_color` varchar(255) DEFAULT NULL,
+  `border_radius` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Markers_Images_idx` (`Images_id`),
+  CONSTRAINT `fk_Markers_Images` FOREIGN KEY (`Images_id`) REFERENCES `Images` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `Markers` (`id`, `markerTop`, `markerLeft`, `color`, `animation_type`, `marker_type`, `Images_id`, `marker_image`, `background_color`, `border_radius`) VALUES
+(30,	'843.1718061674',	'1215.859030837',	'#e91e63',	'',	'',	3,	'',	'',	''),
+(31,	'640.59387494805',	'1018.931197065',	'#e91e63',	'',	'',	4,	'',	'',	''),
+(32,	'871.23914819675',	'844.90446361649',	'#e91e63',	'',	'',	8,	'',	'',	''),
+(67,	'573.61111111111',	'266.38888888889',	'#e91e63',	'',	'',	3,	'',	'',	''),
+(83,	'234.72222222222',	'1020.1388888889',	'#e91e63',	'',	'',	8,	'',	'',	''),
+(86,	'922.19722266011',	'294.50121096605',	'#e91e63',	'',	'',	3,	'',	'',	''),
+(92,	'273.42859675336',	'158.22401465461',	'#e91e63',	'',	'',	16,	'',	'',	''),
+(93,	'140.11676396997',	'477.99833194329',	'#e91e63',	'',	'',	17,	'',	'',	''),
+(94,	'155.21878335112',	'120.64034151547',	'#e91e63',	'',	'',	17,	'',	'',	''),
+(97,	'1003.2671081678',	'1074.4370860927',	'#e91e63',	'',	'',	8,	'',	'',	''),
+(106,	'481.04286973231',	'233.16925126763',	'#e91e63',	'',	'',	4,	'',	'',	''),
+(107,	'892.55972696246',	'1800.409556314',	'#e91e63',	'',	'',	4,	'',	'',	''),
+(108,	'69.739814814815',	'302.63240740741',	'#e91e63',	'',	'',	16,	'',	'',	''),
+(110,	'729.91744729381',	'1751.8018735052',	'#e91e63',	'',	'',	3,	'',	'',	''),
+(111,	'622.22222222222',	'1215.2777777778',	'#e91e63',	'',	'',	3,	'',	'',	''),
+(114,	'239.16666666667',	'266.38888888889',	'#e91e63',	'',	'',	3,	'',	'',	''),
+(115,	'328.60411709426',	'544.25056893737',	'#e91e63',	'',	'',	18,	'',	'',	''),
+(116,	'368.74609730748',	'168.96973066495',	'#e91e63',	'',	'',	18,	'',	'',	''),
+(117,	'431.52509326904',	'352.28486596521',	'#e91e63',	'',	'',	19,	'',	'',	''),
+(118,	'361.83188130302',	'498.35420063371',	'#e91e63',	'',	'',	19,	'',	'',	''),
+(119,	'436.61760873892',	'489.14303535413',	'#e91e63',	'',	'',	20,	'',	'',	''),
+(120,	'142.8035036101',	'1089.9026022656',	'#e91e63',	'',	'',	20,	'',	'',	''),
+(121,	'233.41176470588',	'508.23529411765',	'#e91e63',	'',	'',	21,	'',	'',	''),
+(122,	'447.05882352941',	'220.23529411765',	'#e91e63',	'',	'',	21,	'',	'',	''),
+(123,	'302.38166726394',	'827.14267726907',	'#e91e63',	'',	'',	22,	'',	'',	''),
+(124,	'191.43879826311',	'125.97124750616',	'#e91e63',	'',	'',	22,	'',	'',	''),
+(125,	'67.62436005196',	'100.95407656453',	'#e91e63',	'',	'',	23,	'',	'',	''),
+(126,	'191.43879826311',	'125.97124750616',	'#e91e63',	'',	'',	23,	'',	'',	''),
+(127,	'67.62436005196',	'100.95407656453',	'#e91e63',	'',	'',	24,	'',	'',	''),
+(128,	'191.43879826311',	'125.97124750616',	'#e91e63',	'',	'',	24,	'',	'',	''),
+(129,	'67.62436005196',	'100.95407656453',	'#e91e63',	'',	'',	25,	'',	'',	''),
+(130,	'156.84117647059',	'314.21764705882',	'#e91e63',	'',	'',	25,	'',	'',	''),
+(131,	'67.62436005196',	'100.95407656453',	'#e91e63',	'',	'',	26,	'',	'',	''),
+(132,	'191.43879826311',	'125.97124750616',	'#e91e63',	'',	'',	26,	'',	'',	'');
+
+DROP TABLE IF EXISTS `Popup_Contents`;
+CREATE TABLE `Popup_Contents` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `widget_type_id` varchar(255) DEFAULT NULL,
+  `react_widget_id` varchar(255) DEFAULT NULL,
+  `content` varchar(3000) DEFAULT NULL,
+  `Markers_id` int NOT NULL,
+  `order_no` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Popup_Contents_Markers1_idx` (`Markers_id`),
+  CONSTRAINT `fk_Popup_Contents_Markers1` FOREIGN KEY (`Markers_id`) REFERENCES `Markers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `Popup_Contents` (`id`, `widget_type_id`, `react_widget_id`, `content`, `Markers_id`, `order_no`) VALUES
+(116,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	30,	0),
+(117,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum   Maxime? 2 as as at\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	30,	1),
+(118,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	30,	3),
+(119,	'widget_id_2',	'widget_id_2',	'161584678646popup_image604fdd8224fc1.jpeg',	31,	0),
+(122,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	31,	2),
+(126,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test buttons\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	32,	1),
+(325,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":12,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":12,\"style\":\"\"},{\"offset\":0,\"length\":12,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":12,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	83,	1),
+(326,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor n tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	83,	0),
+(327,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"CLICK here\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://google.com\"}',	83,	3),
+(336,	'widget_id_2',	'widget_id_2',	'162654635728162647372430Image5.jpeg',	86,	0),
+(337,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	86,	2),
+(338,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	86,	3),
+(339,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"CLICK HERE\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"http://google.com\"}',	86,	1),
+(360,	'widget_id_2',	'widget_id_2',	'162647372430Image5.jpeg',	92,	0),
+(361,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	92,	1),
+(362,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	92,	2),
+(363,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	92,	3),
+(364,	'widget_id_2',	'widget_id_2',	'162656193268161823144595popup_image60744095e1bae.jpeg',	93,	0),
+(365,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	93,	1),
+(366,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	93,	2),
+(367,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	93,	3),
+(368,	'widget_id_2',	'widget_id_2',	'162656188680161584678646popup_image604fdd8224fc1.jpeg',	94,	0),
+(369,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	94,	1),
+(370,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	94,	2),
+(371,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	94,	3),
+(411,	'widget_id_1',	'widget_id_1_kkmfcdw8by7tl302qyc',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	32,	2),
+(413,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	97,	1),
+(414,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	97,	2),
+(415,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	97,	3),
+(450,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	106,	1),
+(451,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	106,	2),
+(452,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	106,	3),
+(453,	'widget_id_4',	'widget_id_4_kmazogh6ozmc7d7o07c',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Test\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://www.google.com/\"}',	67,	2),
+(454,	'widget_id_2',	'widget_id_2',	'161584688847popup_image604fdde828dda.jpeg',	107,	1),
+(455,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}}',	107,	0),
+(456,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	107,	2),
+(457,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	107,	3),
+(462,	'widget_id_3',	'widget_id_3_knhbasn84q1nh7nhchx',	'https://www.youtube.com/embed/-pdVUsCqd2U',	106,	0),
+(463,	'widget_id_7',	'widget_id_7_knhots4g7cn5a7i91n',	'[{\"id\":\"1\",\"slide_type\":\"image\",\"src\":\"162005138048popup_image609005b44a3d4.jpeg\",\"order_no\":\"1\",\"caption\":\"         Slide 2 caption here\"},{\"id\":\"2\",\"slide_type\":\"image\",\"src\":\"162005187873photo-1509178630052-fb2fa8a64cde.jpeg\",\"order_no\":\"0\",\"caption\":\"Slide caption here\"},{\"id\":\"3\",\"slide_type\":\"video\",\"src\":\"https:\\/\\/www.youtube.com\\/embed\\/jWUlvAv0LOA\",\"order_no\":\"2\",\"caption\":\"carousel video slide caption\"},{\"id\":\"4\",\"slide_type\":\"video\",\"src\":\"https:\\/\\/www.youtube.com\\/embed\\/-pdVUsCqd2U\",\"order_no\":3,\"caption\":\"carousel video slide caption\"},{\"id\":\"5\",\"slide_type\":\"image\",\"src\":\"_popup_placeholder_image.png\",\"order_no\":4,\"caption\":\"carousel slide caption\"}]',	30,	2),
+(474,	'widget_id_1',	'widget_id_1_kr6wnzhjv3o0hyh3tbh',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	31,	1),
+(475,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	108,	0),
+(476,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	108,	1),
+(477,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	108,	2),
+(478,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	108,	3),
+(483,	'widget_id_1',	'widget_id_1_krkielj4fbhv4aturxr',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem  test\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":11,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":11,\"style\":\"\"},{\"offset\":0,\"length\":11,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":11,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"},{\"offset\":0,\"length\":11,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	67,	1),
+(490,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	110,	2),
+(492,	'widget_id_1',	'widget_id_1_krkk7ps3a6corxu8l2n',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":12,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":12,\"style\":\"\"},{\"offset\":0,\"length\":12,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":12,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	110,	0),
+(493,	'widget_id_7',	'widget_id_7_krkkajdsy83p036xeam',	'[{\"id\":\"3\",\"slide_type\":\"image\",\"src\":\"_popup_placeholder_image.png\",\"order_no\":\"0\",\"caption\":\"carousel slide caption\"},{\"id\":\"5\",\"slide_type\":\"image\",\"src\":\"_popup_placeholder_image.png\",\"order_no\":\"1\",\"caption\":\"carousel slide caption\"},{\"id\":\"6\",\"slide_type\":\"image\",\"src\":\"_popup_placeholder_image.png\",\"order_no\":\"2\",\"caption\":\"carousel slide caption\"},{\"id\":\"7\",\"slide_type\":\"video\",\"src\":\"https:\\/\\/www.youtube.com\\/embed\\/-pdVUsCqd2U\",\"order_no\":\"3\",\"caption\":\"carousel video slide caption\"}]',	110,	1),
+(495,	'widget_id_3',	'widget_id_3_krnwg3aqr9af2pxkjz8',	'https://www.youtube.com/embed/deyxI-6C2u4',	32,	0),
+(496,	'widget_id_3',	'widget_id_3_krnwgbcqcy9o1zj7d6',	'https://www.youtube.com/embed/-pdVUsCqd2U',	97,	0),
+(497,	'widget_id_2',	'widget_id_2_krz7jphipifi39ifr7p',	'_popup_placeholder_image.png',	83,	2),
+(498,	'widget_id_3',	'widget_id_3_ks0cxpmwi65x8xm7ga',	'https://www.youtube.com/embed/-pdVUsCqd2U',	67,	0),
+(502,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"test2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://www.google.com/\"}',	111,	1),
+(510,	'widget_id_2',	'widget_id_2_kte9pwwq5zqv555aztj',	'_popup_placeholder_image.png',	111,	0),
+(515,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	114,	0),
+(516,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"test\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":4,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":4,\"style\":\"\"},{\"offset\":0,\"length\":4,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":4,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	114,	1),
+(517,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"test\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	114,	2),
+(518,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"test\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	114,	3),
+(519,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	115,	0),
+(520,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	115,	1),
+(521,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	115,	2),
+(522,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	115,	3),
+(523,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	116,	0),
+(524,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	116,	1),
+(525,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	116,	2),
+(526,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	116,	3),
+(527,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	117,	0),
+(528,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	117,	1),
+(529,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	117,	2),
+(530,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	117,	3),
+(531,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	118,	0),
+(532,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	118,	1),
+(533,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	118,	2),
+(534,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	118,	3),
+(535,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	119,	0),
+(536,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	119,	1),
+(537,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	119,	2),
+(538,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	119,	3),
+(539,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	120,	0),
+(540,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	120,	1),
+(541,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	120,	2),
+(542,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	120,	3),
+(543,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	121,	0),
+(544,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	121,	1),
+(545,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	121,	2),
+(546,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	121,	3),
+(547,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	122,	0),
+(548,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	122,	1),
+(549,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	122,	2),
+(550,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	122,	3),
+(551,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	123,	0),
+(552,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	123,	1),
+(553,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	123,	2),
+(554,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	123,	3),
+(555,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	124,	0),
+(556,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	124,	1),
+(557,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	124,	2),
+(558,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	124,	3),
+(559,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	125,	0),
+(560,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	125,	1),
+(561,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	125,	2),
+(562,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	125,	3),
+(563,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	126,	0),
+(564,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	126,	1),
+(565,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	126,	2),
+(566,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	126,	3),
+(567,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	127,	0),
+(568,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	127,	1),
+(569,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	127,	2),
+(570,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	127,	3),
+(571,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	128,	0),
+(572,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	128,	1),
+(573,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	128,	2),
+(574,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	128,	3),
+(575,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	129,	0),
+(576,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	129,	1),
+(577,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	129,	2),
+(578,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	129,	3),
+(579,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	130,	0),
+(580,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	130,	1),
+(581,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	130,	2),
+(582,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	130,	3),
+(583,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	131,	0),
+(584,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	131,	1),
+(585,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	131,	2),
+(586,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	131,	3),
+(587,	'widget_id_2',	'widget_id_2',	'_popup_placeholder_image.png',	132,	0),
+(588,	'widget_id_1',	'widget_id_1',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	132,	1),
+(589,	'widget_id_5',	'widget_id_5',	'{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',	132,	2),
+(590,	'widget_id_4',	'widget_id_4',	'{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',	132,	3);
+
+DROP TABLE IF EXISTS `Stations`;
+CREATE TABLE `Stations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `Stations` (`id`, `name`) VALUES
+(1,	'test'),
+(3,	'test2');
+
+DROP TABLE IF EXISTS `Users`;
+CREATE TABLE `Users` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `permission` varchar(11) DEFAULT NULL,
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `Img-annotator`.`Users` (`id`, `username`, `email`, `password`, `permission`, `created_time`)
-VALUES
-	(1,'test_user','test@testuser.com','$2y$10$T45vxDTx6OmTFDDFFdvTCe/5pBYK/zcHTdX6rYzX7rhC.5PQFxmiG',NULL,'2021-01-20 13:30:13');
+INSERT INTO `Users` (`id`, `username`, `email`, `password`, `permission`, `created_time`) VALUES
+(1,	'test_user',	'test@testuser.com',	'$2y$10$T45vxDTx6OmTFDDFFdvTCe/5pBYK/zcHTdX6rYzX7rhC.5PQFxmiG',	NULL,	'2021-01-20 13:30:13');
 
-CREATE TABLE `Img-annotator`.`Stations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
-
-INSERT INTO `Img-annotator`.`Stations` (`id`, `name`)
-VALUES
-	(1,'test'),
-	(3,'test2');
-
-
-CREATE TABLE `Img-annotator`.`Images` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `time` datetime DEFAULT NULL,
-  `Stations_id` int(11) NOT NULL,
-  `Users_id` int(11) NOT NULL,
-  `last_modified` datetime DEFAULT NULL,
-  `deleted` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`,`Users_id`),
-  KEY `fk_Images_Stations1_idx` (`Stations_id`),
-  KEY `fk_Images_Users1_idx` (`Users_id`),
-  CONSTRAINT `fk_Images_Stations1` FOREIGN KEY (`Stations_id`) REFERENCES `Stations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Images_Users1` FOREIGN KEY (`Users_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-INSERT INTO `Img-annotator`.`Images` (`id`, `url`, `name`, `time`, `Stations_id`, `Users_id`, `last_modified`, `deleted`)
-VALUES
-	(3,'161132036832photo-1579126898112-0ea5054a86f6.jpeg','TEST','2021-01-22 12:59:28',1,1,NULL,0),
-	(4,'161132069020photo-1611089384597-c4eaa6a19fef(1).jpeg','Test','2021-01-22 13:04:50',3,1,NULL,0),
-	(8,'161133306926photo-1611077855004-cc0614011bd8.jpeg','Test','2021-01-22 16:31:09',1,1,NULL,0),
-	(16,'161184955763samsung.gif','samsung ','2021-01-28 15:59:17',1,1,NULL,0),
-	(17,'161185315432ezgif-6-1f467db0ae52.jpg','webp test','2021-01-28 16:59:14',3,1,NULL,0);
-
-
-CREATE TABLE `Img-annotator`.`Markers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `markerTop` varchar(255) DEFAULT NULL,
-  `markerLeft` varchar(255) DEFAULT NULL,
-  `color` varchar(45) DEFAULT NULL,
-  `animation_type` varchar(45) DEFAULT NULL,
-  `marker_type` varchar(45) DEFAULT NULL,
-  `Images_id` int(11) NOT NULL,
-  `marker_image` varchar(255) DEFAULT NULL,
-  `background_color` varchar(255) DEFAULT NULL,
-  `border_radius` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_Markers_Images_idx` (`Images_id`),
-  CONSTRAINT `fk_Markers_Images` FOREIGN KEY (`Images_id`) REFERENCES `Images` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-INSERT INTO `Img-annotator`.`Markers` (`id`, `markerTop`, `markerLeft`, `color`, `animation_type`, `marker_type`, `Images_id`, `marker_image`, `background_color`, `border_radius`)
-VALUES
-
-	(30,'612.96092460099','1215.6026417171','#e91e63','','',3,'','',''),
-	(31,'640.59387494805','1018.931197065','#e91e63','','',4,'','',''),
-	(32,'835.38405975504','845.95854152409','#e91e63','','',8,'','',''),
-	(67,'596.31399317406','263.7542662116','#e91e63','','',3,'','',''),
-	(83,'151.9171423996','1177.3578535969','#e91e63','','',8,'','',''),
-	(86,'912.16648879402','235.32550693703','#e91e63','','',3,'','',''),
-	(91,'78.747435864968','531.54519208854','#e91e63','','',16,'','',''),
-	(92,'273.42859675336','158.22401465461','#e91e63','','',16,'','',''),
-	(93,'150.6083244397','518.67662753469','#e91e63','','',17,'','',''),
-	(94,'155.21878335112','120.64034151547','#e91e63','','',17,'','',''),
-	(97,'529.11183556633','1195.8315111518','#e91e63','','',8,'','',''),
-	(106,'481.04286973231','233.16925126763','#e91e63','','',4,'','',''),
-	(107,'892.55972696246','1800.409556314','#e91e63','','',4,'','','');
-
-
-CREATE TABLE `Img-annotator`.`Popup_Contents` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `widget_type_id` varchar(255) DEFAULT NULL,
-  `react_widget_id` varchar(255) DEFAULT NULL,
-  `content` varchar(3000) DEFAULT NULL,
-  `Markers_id` int(11) NOT NULL,
-  `order_no` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_Popup_Contents_Markers1_idx` (`Markers_id`),
-  CONSTRAINT `fk_Popup_Contents_Markers1` FOREIGN KEY (`Markers_id`) REFERENCES `Markers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-
-INSERT INTO `Img-annotator`.`Popup_Contents` (`id`, `widget_type_id`, `react_widget_id`, `content`, `Markers_id`, `order_no`)
-VALUES
-	(116,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',30,0),
-	(117,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum   Maxime? 2 as as at\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',30,1),
-	(118,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',30,3),
-	(119,'widget_id_2','widget_id_2','161584678646popup_image604fdd8224fc1.jpeg',31,0),
-	(122,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',31,2),
-	(123,'widget_id_2','widget_id_2','161217481915popup_image6017d5e3c418c.jpeg',32,1),
-	(126,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test buttons\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',32,2),
- 
-
-	(324,'widget_id_2','widget_id_2','161217463424popup_image6017d52a0a21b.jpeg',83,0),
-	(325,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":12,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":12,\"style\":\"\"},{\"offset\":0,\"length\":12,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":12,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',83,1),
-	(326,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor n tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',83,2),
-	(327,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"CLICK here\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://google.com\"}',83,3),
-
-	(336,'widget_id_2','widget_id_2','161211644923popup_image6016f1e1edc79.jpeg',86,0),
-	(337,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',86,2),
-	(338,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',86,3),
-	(339,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"CLICK HERE\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"http://google.com\"}',86,1),
-	(356,'widget_id_2','widget_id_2','161584650362popup_image604fdc67be585.jpeg',91,0),
-	(357,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',91,1),
-	(358,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',91,2),
-	(359,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',91,3),
-	(360,'widget_id_2','widget_id_2','162647372430Image5.jpeg',92,0),
-	(361,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',92,1),
-	(362,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',92,2),
-	(363,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',92,3),
-	(364,'widget_id_2','widget_id_2','https://images.unsplash.com/photo-1511556532299-8f662fc26c06?ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80',93,0),
-	(365,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',93,1),
-	(366,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',93,2),
-	(367,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',93,3),
-	(368,'widget_id_2','widget_id_2','https://images.unsplash.com/photo-1511556532299-8f662fc26c06?ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80',94,0),
-	(369,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum 2\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',94,1),
-	(370,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',94,2),
-	(371,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',94,3),
-
-
-	(395,'widget_id_2','widget_id_2_kkis3y0jnh9mzfnod6h','161850683416popup_image60787452f1da7.jpeg',67,1),
-	(409,'widget_id_1','widget_id_1_kkljq2u8emuwkc7dldh','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorema empsum a\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":15,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":15,\"style\":\"\"},{\"offset\":0,\"length\":15,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":15,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',67,2),
-	(411,'widget_id_1','widget_id_1_kkmfcdw8by7tl302qyc','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',32,0),
-	(413,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',97,1),
-	(414,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',97,2),
-	(415,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',97,3),
-	(450,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',106,1),
-	(451,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',106,2),
-	(452,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',106,3),
-	(453,'widget_id_4','widget_id_4_kmazogh6ozmc7d7o07c','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://www.google.com/\"}',67,3),
-	(454,'widget_id_2','widget_id_2','161584688847popup_image604fdde828dda.jpeg',107,1),
-	(455,'widget_id_1','widget_id_1','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum ,newly added\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',107,0),
-	(456,'widget_id_5','widget_id_5','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, assumenda illo, vitae maiores itaque aliquid ad voluptates sit hic beatae, non tempora rerum ipsa? Maxime? 2\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',107,2),
-	(457,'widget_id_4','widget_id_4','{\"buttonTextSrc\":{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Some test button\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{\"text-align\":\"center\"}}],\"entityMap\":{}},\"buttonUrlSrc\":\"https://unsplash.com/photos/hNSKX6sKWfk\"}',107,3),
-	(462,'widget_id_3','widget_id_3_knhbasn84q1nh7nhchx','https://www.youtube.com/embed/-pdVUsCqd2U',106,0),
-	(463,'widget_id_7','widget_id_7_knhots4g7cn5a7i91n','[{\"id\":\"1\",\"slide_type\":\"image\",\"src\":\"162005138048popup_image609005b44a3d4.jpeg\",\"order_no\":\"1\",\"caption\":\"         Slide 2 caption here\"},{\"id\":\"2\",\"slide_type\":\"image\",\"src\":\"162005187873photo-1509178630052-fb2fa8a64cde.jpeg\",\"order_no\":\"0\",\"caption\":\"Slide caption here\"},{\"id\":\"3\",\"slide_type\":\"video\",\"src\":\"https:\\/\\/www.youtube.com\\/embed\\/jWUlvAv0LOA\",\"order_no\":\"2\",\"caption\":\"carousel video slide caption\"},{\"id\":\"4\",\"slide_type\":\"video\",\"src\":\"https:\\/\\/www.youtube.com\\/embed\\/-pdVUsCqd2U\",\"order_no\":3,\"caption\":\"carousel video slide caption\"},{\"id\":\"5\",\"slide_type\":\"image\",\"src\":\"_popup_placeholder_image.png\",\"order_no\":4,\"caption\":\"carousel slide caption\"}]',30,2),
-	(464,'widget_id_7','widget_id_7_knx3l84ga17dtu3qk8e','[{\"id\":\"1\",\"slide_type\":\"image\",\"src\":\"_popup_placeholder_image.png\",\"order_no\":\"0\",\"caption\":\"Carousel slide 1 caption\"},{\"id\":\"2\",\"slide_type\":\"image\",\"src\":\"_popup_placeholder_image.png\",\"order_no\":\"1\",\"caption\":\"Carousel slide 2 caption\"}]',97,0),
-	(465,'widget_id_3','widget_id_3_ko7f75n4g246kxdthim','https://www.youtube.com/embed/-pdVUsCqd2U',67,0),
- 
-	(474,'widget_id_1','widget_id_1_kr6wnzhjv3o0hyh3tbh','{\"blocks\":[{\"key\":\"7pjmv\",\"text\":\"Lorem empsum\",\"type\":\"header-three\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":14,\"style\":\"color-rgb(52,58,64)\"},{\"offset\":0,\"length\":14,\"style\":\"\"},{\"offset\":0,\"length\":14,\"style\":\"fontsize-1.5rem\"},{\"offset\":0,\"length\":14,\"style\":\"fontfamily--apple-system, BlinkMacSystemFont, \\\"Segoe UI\\\", Roboto, \\\"Helvetica Neue\\\", Arial, \\\"Noto Sans\\\", sans-serif, \\\"Apple Color Emoji\\\", \\\"Segoe UI Emoji\\\", \\\"Segoe UI Symbol\\\", \\\"Noto Color Emoji\"}],\"entityRanges\":[],\"data\":{\"text-align\":\"left\"}}],\"entityMap\":{}}',31,1);
+-- 2021-10-17 08:50:36

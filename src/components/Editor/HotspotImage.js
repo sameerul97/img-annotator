@@ -16,6 +16,7 @@ import API from "../../api/index";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Widgets } from "../Widgets";
 import useGetImageNaturalData from "../../hooks/useGetImageNaturalData.ts";
+import Loading from "../Loading";
 
 function HotspotImageEditor(props) {
   const itemsRef = useRef([]);
@@ -69,6 +70,8 @@ function HotspotImageEditor(props) {
     imageWidth,
     imageHeight,
   ] = useGetImageNaturalData();
+
+  console.log(imageLoaded);
 
   function updateMarkerTopAndLeft(marker_index, left, top) {
     setImage((prevState) => {
@@ -290,7 +293,7 @@ function HotspotImageEditor(props) {
 
   const fetchImage = useCallback(async () => {
     try {
-      var res = await await API.get(`/image/index.php`, {
+      var res = await API.get(`/image/index.php`, {
         params: {
           image_id: parseInt(id),
         },
@@ -299,7 +302,7 @@ function HotspotImageEditor(props) {
         },
       });
 
-      const [fetchedImage, popupContent] = ParseData(res.data);
+      const [fetchedImage, popupContent] = await ParseData(res.data);
 
       setPopups(popupContent);
       setImage(fetchedImage);
@@ -1061,6 +1064,10 @@ function HotspotImageEditor(props) {
     }
   };
 
+  if (!loaded) {
+    return <Loading />;
+  }
+
   return (
     <React.Fragment>
       {loaded ? (
@@ -1121,20 +1128,18 @@ function HotspotImageEditor(props) {
                   }
                 >
                   {showToast && <Toast />}
-                  {loaded ? null : (
-                    <div className="text-center w-100 pt-5 mt-5 ">
-                      <div className="spinner-grow text-info p-3" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </div>
-                  )}
+                  {imageLoaded ? null : <p>Image loading</p>}
                   <img
+                    ref={imageRef}
                     className={`target rounded shadow ${
                       loaded ? "" : "d-none"
                     }`}
                     alt="empty"
                     src={image.url}
-                    onLoad={() => setLoaded(true)}
+                    onLoad={() => {
+                      // setLoaded(true);
+                      onLoad();
+                    }}
                   />
                   <HotspotWrap>
                     <div
@@ -1142,7 +1147,7 @@ function HotspotImageEditor(props) {
                       style={
                         popupModeMarkerSelected ? { opacity: 1 } : undefined
                       }
-                    ></div>
+                    />
 
                     {image.marker_positions.map((image_position, index) => (
                       <React.Fragment key={index}>

@@ -57,7 +57,7 @@ const useFetchImage = (id: string) => {
               image_id: parseInt(id),
             },
           });
-          const [fetchedImage, popupContent] = ParseData(data.data);
+          const [fetchedImage, popupContent] = await ParseData(data.data);
 
           cache.current[id] = data;
 

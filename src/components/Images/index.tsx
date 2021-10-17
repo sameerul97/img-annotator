@@ -55,7 +55,11 @@ function Images() {
         {images.map((img: Image) => (
           <div key={img.id} className="card border-0 py-2">
             <HashRouter>
-              <Link to={`/image/${img.id}`} onClick={handleClick}>
+              <Link
+                to={`/image/${img.id}`}
+                className="text-decoration-none"
+                onClick={handleClick}
+              >
                 <AnImage img={img}></AnImage>
               </Link>
             </HashRouter>
@@ -70,10 +74,17 @@ function Images() {
 
 function AnImage({ img }: { img: Image }) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageHovered, setImageHovered] = useState(false);
   return (
     <div
       style={{
         position: "relative",
+      }}
+      onMouseEnter={(e) => {
+        setImageHovered(true);
+      }}
+      onMouseLeave={(e) => {
+        setImageHovered(false);
       }}
     >
       {imageLoaded ? null : (
@@ -87,7 +98,9 @@ function AnImage({ img }: { img: Image }) {
         src={img.url}
         onLoad={() => setImageLoaded(true)}
         alt="empty"
-        className="card-img img-fluid shadow "
+        className={`card-img img-fluid smoothTransition ${
+          imageHovered ? "shadow-lg" : "shadow"
+        } `}
       />
       <div
         className="text-left "
@@ -100,7 +113,7 @@ function AnImage({ img }: { img: Image }) {
         }}
       >
         <p
-          className={` ${imageLoaded ? null : "shine"} w-100 `}
+          className={` ${imageLoaded ? "" : "shine"} w-100 `}
           style={imageLoaded ? {} : { minHeight: "30px" }}
         >
           {imageLoaded ? img.name : " "}

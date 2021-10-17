@@ -1,6 +1,6 @@
 import { Widget_ID } from "../components/Widgets";
 
-function ParseData(imageData: any) {
+async function ParseData(imageData: any) {
   const fetchedImage = {} as any,
     popupContent = [] as any;
 

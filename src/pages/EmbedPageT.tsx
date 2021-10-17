@@ -58,7 +58,7 @@ function EmbedPageT(props: EmbedPageProps) {
 
         let fetchedImage;
         let popupContent;
-         [fetchedImage, popupContent] = ParseData(res.data);
+        [fetchedImage, popupContent] = await ParseData(res.data);
         console.log(fetchedImage);
 
         setImage(fetchedImage);
