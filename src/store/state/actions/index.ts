@@ -1,4 +1,5 @@
 import { ActionType } from "../action-types/index"
+import { Image } from "../types";
 
 
 interface FetchStartLoading {
@@ -12,7 +13,7 @@ interface FetchEndLoading {
 interface FetchAllImages {
     type: ActionType.FETCH_ALL_IMAGES,
     payload: {
-        images: any,
+        images: Image[],
         total_pages: any
     }
 }

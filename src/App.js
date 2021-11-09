@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
+
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import Navbar from "./components/Home/Navbar";
@@ -9,8 +10,8 @@ import PrivateRoute, { tokenValidation } from "./components/PrivateRoute";
 
 import Home from "./pages/Home";
 import NewImage from "./pages/CreateImage";
-import Image from "./pages/Editor";
-import Editor from "./pages/Images";
+import Editor from "./pages/Editor";
+import Images from "./pages/Images";
 import EmbedPage from "./pages/EmbedPage";
 import EmbedPageT from "./pages/EmbedPageT";
 
@@ -18,7 +19,8 @@ import NotFoundImage from "./assets/page_not_found.svg";
 
 import { EmbedStoreProvider } from "./store/Embed";
 
-import EditorStore from "./store/All_Images/index.tsx";
+import EditorStore from "./store/state/index.tsx";
+import store from "./store/state/";
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -71,15 +73,25 @@ function App() {
           <PrivateRoute
             path="/image"
             exact
-            component={Editor}
+            component={Images}
+            // render={() => (
+            //   <Provider store={store}>
+            //     <EmbedPage setIsEmbedPage={setIsEmbedPage} />
+            //   </Provider>
+            // )}
             setUserLoggedIn={setUserLoggedIn}
           />
 
           <PrivateRoute
             path="/image/:id"
             exact
-            component={Image}
+            component={Editor}
             setUserLoggedIn={setUserLoggedIn}
+            // component={(props) => (
+            //   <Provider store={store}>
+            //     <Editor id={props.match.params} />
+            //   </Provider>
+            // )}
           />
 
           <Route

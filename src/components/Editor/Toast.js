@@ -1,8 +1,17 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
 import $ from "jquery";
 
 function Toast() {
   window.$(".toast").toast();
+  const { toast } = useSelector((state) => {
+    return state.editor;
+  });
+
+  if (!toast) {
+    return <React.Fragment />;
+  }
 
   return (
     <div aria-live="polite" aria-atomic="true" style={{ position: "relative" }}>

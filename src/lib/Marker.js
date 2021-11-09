@@ -19,7 +19,7 @@ const Marker = {
         height: _height,
         getWidthLess: $(".imageMarker img").width(),
         setPersenWidth: (_getWidthLess / _width) * 100,
-        setHeight: (_height * _setPersenWidth) / 100
+        setHeight: (_height * _setPersenWidth) / 100,
       };
       // console.log(data);
 
@@ -28,7 +28,6 @@ const Marker = {
   },
 
   positionMarkers: function (itemsRef) {
-    console.log(itemsRef);
     Marker.getImageMetric($(".imageMarker"), function (imageMetrics) {
       for (let i = 0; i < itemsRef.current.length; i++) {
         try {
@@ -49,7 +48,7 @@ const Marker = {
 
             $(itemsRef.current[i]).css({
               top: markerDataTop,
-              left: markerDataLeft
+              left: markerDataLeft,
             });
           }
         } catch (e) {
@@ -68,7 +67,7 @@ const Marker = {
 
       callback({
         top: parseInt(markerDataTop),
-        left: parseInt(markerDataLeft)
+        left: parseInt(markerDataLeft),
       });
     });
   },
@@ -92,14 +91,14 @@ const Marker = {
       $(popupBox).css({
         top: "",
         right: "",
-        left: ""
+        left: "",
       });
 
       if (window.innerWidth > 768) {
         if (markerDataLeft >= (imageMetrics.getWidthLess / 100) * 58) {
           $(popupBox).css({
             top: markerDataTop / 2,
-            right: $(".imageMarker").width() - markerDataLeft + 25
+            right: $(".imageMarker").width() - markerDataLeft + 25,
           });
 
           $(popupBoxArrow).find(".pointBoxArrowRight").show();
@@ -107,7 +106,7 @@ const Marker = {
         } else {
           $(popupBox).css({
             top: markerDataTop / 2,
-            left: markerDataLeft
+            left: markerDataLeft,
           });
 
           $(popupBoxArrow).find(".pointBoxArrowLeft").show();
@@ -118,7 +117,7 @@ const Marker = {
       $(popupBoxArrow).css({
         top:
           (parseFloat(position.top) * imageMetrics.setPersenWidth) / 100 / 2 +
-          25
+          25,
       });
       callback();
     });
@@ -164,7 +163,7 @@ const Marker = {
         }
       );
     });
-  }
+  },
 };
 
 export default Marker;

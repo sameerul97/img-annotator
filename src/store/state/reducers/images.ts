@@ -1,5 +1,6 @@
 import { ActionType } from "../action-types";
 import { Action } from "../actions"
+import { ImagesState } from "../types/images";
 
 const initialState = {
   isLoading: true,
@@ -12,7 +13,7 @@ const initialState = {
   },
 };
 
-export default (state = initialState, action: Action) => {
+export default (state: ImagesState = initialState, action: Action) => {
   switch (action.type) {
     case ActionType.FETCH_START_LOADING:
       return { ...state, isLoading: true };

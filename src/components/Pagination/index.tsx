@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { EditorState } from "../../store/state/types/editor";
 
 interface Post {
   id: number;
@@ -12,7 +13,7 @@ interface EditorStore {
   auth: {
     authData: null | string;
   };
-  posts: {
+  images: {
     images: Post[];
     isLoading: string;
     total_pages: number;
@@ -33,7 +34,7 @@ function Pagination({
 }) {
   const { search, search_query, current_page, images } = useSelector(
     (state: EditorStore) => {
-      return state.posts;
+      return state.images;
     }
   );
 

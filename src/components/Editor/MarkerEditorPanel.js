@@ -74,12 +74,7 @@ function MarkerEditorPanel(props) {
           >
             Edit Page info
           </button>
-          <Modal
-            imageId={props.imageId}
-            header={props.header}
-            copy={props.copy}
-            script={props.script}
-          />
+
           <PreviewButton imageId={props.imageId} />
           <Buttons
             enablePopupView={props.enablePopupView}

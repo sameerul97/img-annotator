@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { HashRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ViewAllImages } from "../../store/All_Images/actions-creators/index.ts";
+import { ViewAllImages } from "../../store/state/actions-creators/index.ts";
 
 function Navbar(props) {
   const dispatch = useDispatch();

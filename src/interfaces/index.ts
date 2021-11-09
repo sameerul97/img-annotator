@@ -8,7 +8,7 @@ interface EditorStore {
     auth: {
         authData: null | string;
     };
-    posts: {
+    images: {
         images: Image[];
         isLoading: string;
         total_pages: number;

@@ -15,3 +15,6 @@ export default API;
 export const fetchAllImages = () => API.get(`/allimages/index.php`);
 export const fetchImages = (page_no = 1, search_query = "") =>
   API.get(`/images/index.php?page_no=${page_no}&image_name=${search_query}`);
+
+export const fetchImage = async (image_id = 1) =>
+  API.get(`/image/index.php?image_id=${image_id}`);

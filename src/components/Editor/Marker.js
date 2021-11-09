@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setToast } from "../../store/state/actions-creators/editor";
 
 const Markers = React.forwardRef((props, ref) => {
+  const dispatch = useDispatch();
+
   const [showBorder, setShowBorder] = useState(false);
   const [thisMarkerId, setThisMarkerid] = useState(false);
 
@@ -55,8 +58,10 @@ const Markers = React.forwardRef((props, ref) => {
                     popupId: props.markers.popup_id,
                   });
                 } else {
-                  props.setShowToast(true);
-                  setTimeout(() => props.setShowToast(false), 4500);
+                  dispatch(setToast(true));
+                  setTimeout(() => {
+                    dispatch(setToast(false));
+                  }, 4500);
                 }
               }
             : (e) => {

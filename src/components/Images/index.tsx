@@ -8,7 +8,7 @@ import {
   getAllImages,
   fetchImagesBySearch,
   ViewAllImages,
-} from "../../store/All_Images/actions-creators";
+} from "../../store/state/actions-creators";
 
 import { Image, EditorStore } from "../../interfaces/index";
 import Pagination from "../Pagination";
@@ -17,7 +17,7 @@ import Loading from "../Loading";
 function Images() {
   const { total_pages, images, isLoading } = useSelector(
     (state: EditorStore) => {
-      return state.posts;
+      return state.images;
     }
   );
 

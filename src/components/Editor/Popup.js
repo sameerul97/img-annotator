@@ -59,18 +59,26 @@ function Popup(props, ref) {
   const [popupReady, setPopupReady] = useState(false);
   const [popupWidgetBeingEdited, setPopupWidgetBeingEdited] = useState([]);
 
-  useTraceUpdate(props);
+  // useTraceUpdate(props);
 
   useLayoutEffect(() => {
+    let isMounted = true;
+
     setPopupItems({ items: props.data.popup_content });
 
     async function fetchData() {
       await Marker.positionPopup(props.positions, function (res) {
-        setPopupPositions({ top: res.top + "px", left: res.left + "px" });
+        if (isMounted) {
+          setPopupPositions({ top: res.top + "px", left: res.left + "px" });
+        }
       });
     }
 
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [props]);
 
   useLayoutEffect(() => {

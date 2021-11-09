@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import $ from "jquery";
 import "../../css/Marker.css";
 import Marker from "../../lib/Marker";
@@ -10,6 +12,7 @@ import Popup from "./Popup";
 import MarkerEditorPanel from "./MarkerEditorPanel";
 import ColorPicker from "./ColorPicker";
 import Toast from "./Toast";
+import Modal from "./Modal";
 import PopupWidgets from "./PopupWidgets";
 import API from "../../api/index";
 
@@ -18,7 +21,15 @@ import { Widgets } from "../Widgets";
 import useGetImageNaturalData from "../../hooks/useGetImageNaturalData.ts";
 import Loading from "../Loading";
 
+import { getImage } from "../../store/state/actions-creators/editor";
+
 function HotspotImageEditor(props) {
+  const dispatch = useDispatch();
+  const { loading, image_not_found_error, image_not_found_error_message } =
+    useSelector((state) => {
+      return state.editor;
+    });
+
   const itemsRef = useRef([]);
 
   const DraggableElement = ".item-point";
@@ -291,6 +302,10 @@ function HotspotImageEditor(props) {
   // const { id } = props.match.params;
   const { id } = props.id;
 
+  useEffect(() => {
+    // dispatch(getImage(id));
+  }, [id, dispatch]);
+
   const fetchImage = useCallback(async () => {
     try {
       var res = await API.get(`/image/index.php`, {
@@ -302,6 +317,9 @@ function HotspotImageEditor(props) {
         },
       });
 
+      setImageNotFoundError(false);
+      setImageNotFoundErrorMessage("");
+
       const [fetchedImage, popupContent] = await ParseData(res.data);
 
       setPopups(popupContent);
@@ -309,6 +327,8 @@ function HotspotImageEditor(props) {
       setLoaded(true);
 
       intiateInteractJS();
+
+      return true;
     } catch (error) {
       let errorResponse = error.response;
 
@@ -320,10 +340,9 @@ function HotspotImageEditor(props) {
         setImageNotFoundError(true);
         setImageNotFoundErrorMessage(errorResponse.data.message);
       }
+      return false;
     }
-
-    return;
-  }, []);
+  }, [id]);
 
   const intiateInteractJS = () => {
     interact(DraggableElement)
@@ -351,6 +370,8 @@ function HotspotImageEditor(props) {
   };
 
   const imageClick = (e) => {
+    // console.log("Image click");
+
     if (!itemsRef.current.includes(e.target)) {
       setSelectedMarker(false);
     }
@@ -361,22 +382,33 @@ function HotspotImageEditor(props) {
      * Using this apporach to add click listerner only for imageMarkerWrapper el,
      * Con: Side effect when toggling between drag and popup mode. pulse Animation delay.
      * */
-    if (loaded) {
-      document
-        .getElementById("imageMarkerWrapper")
-        .addEventListener("mousedown", imageClick);
-      return () => {
-        document
-          .getElementById("imageMarkerWrapper")
-          .removeEventListener("mousedown", imageClick);
-      };
-    }
+    // if (loaded) {
+    //   document
+    //     .getElementById("imageMarkerWrapper")
+    //     .addEventListener("mousedown", imageClick);
+    //   return () => {
+    //     document
+    //       .getElementById("imageMarkerWrapper")
+    //       .removeEventListener("mousedown", imageClick);
+    //   };
+    // }
   }, [loaded]);
 
   useEffect(() => {
     const asyncF = async () => {
-      await fetchImage();
-      await Marker.positionMarkers(itemsRef);
+      const fetchSuccess = await fetchImage();
+
+      // console.log(fetchSuccess);
+
+      if (fetchSuccess) {
+        await Marker.positionMarkers(itemsRef);
+
+        if (loaded) {
+          document
+            .getElementById("imageMarkerWrapper")
+            .addEventListener("mousedown", imageClick);
+        }
+      }
     };
 
     asyncF();
@@ -386,8 +418,14 @@ function HotspotImageEditor(props) {
       window.removeEventListener("resize", updateMarkersPosition);
 
       interact(DraggableElement).unset();
+
+      // if (document.getElementById("imageMarkerWrapper")) {
+      //   document
+      //     .getElementById("imageMarkerWrapper")
+      //     .removeEventListener("mousedown", imageClick);
+      // }
     };
-  }, [fetchImage]);
+  }, [id, loaded, fetchImage]);
 
   useEffect(() => {
     let effectActive = true;
@@ -417,7 +455,7 @@ function HotspotImageEditor(props) {
     return () => {
       effectActive = false;
     };
-  }, [loaded, image, setPopups]);
+  }, [loaded, image, id]);
 
   useEffect(() => {
     if (image.id) {
@@ -469,7 +507,7 @@ function HotspotImageEditor(props) {
           }
         });
     }
-  }, [image, props]);
+  }, [image, props, id]);
 
   const enablePopupView = (event) => {
     setPopupView(true);
@@ -581,7 +619,7 @@ function HotspotImageEditor(props) {
         .then((res) => {
           setError(false);
           setErrorMessage(null);
-          console.log(res);
+          // console.log(res);
         })
         .catch((err) => {
           let errorResponse = err.response;
@@ -1070,170 +1108,148 @@ function HotspotImageEditor(props) {
 
   return (
     <React.Fragment>
-      {loaded ? (
-        <HotspotImageContainer>
-          <div className="row text-center text-white mr-auto">
-            <DragDropContext onDragEnd={onDragEnd}>
-              <div
-                className="text-left rounded-right col-3 smoothTransition pl-0  pr-0 "
-                id="widgetPanel"
-              >
-                <div
-                  className={`text-left bg-info rounded-right px-0 smoothTransition h-100 ${
-                    selectedMarker || popupEditMode ? "col-md-12" : "col-md-4"
-                  }`}
-                >
-                  <ColorPicker
-                    onColorSelected={onColorSelected}
-                    selectedMarker={selectedMarker}
-                    popupViewEnabled={popupView}
-                  />
-
-                  {popupEditMode && (
-                    <PopupWidgets newWidgetBeingAdded={newWidgetBeingAdded} />
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-4 col-9 ">
-                {error && (
-                  <div className="col-md-12 mx-auto " role="alert">
-                    <div className="alert alert-danger" role="alert">
-                      {errorMessage}
-                    </div>
-                  </div>
-                )}
-
-                <MarkerEditorPanel
-                  selectedMarker={selectedMarker}
-                  addNewMarker={addNewMarker}
-                  deleteMarker={deleteMarker}
-                  popupViewEnabled={popupView}
-                  enablePopupView={enablePopupView}
-                  enableDraggableMode={enableDraggableMode}
-                  popupEditMode={popupEditMode}
-                  saveData={saveData}
-                  imageId={image.id}
-                  header={image.header}
-                  copy={image.copy}
-                  script={image.script}
-                />
-                <div
-                  className="imageMarker shadow-lg"
-                  id="imageMarkerWrapper"
-                  style={
-                    isPortrait
-                      ? { maxWidth: "850px", margin: "auto" }
-                      : { maxWidth: "1080px", margin: "auto" }
-                  }
-                >
-                  {showToast && <Toast />}
-                  {imageLoaded ? null : <p>Image loading</p>}
-                  <img
-                    ref={imageRef}
-                    className={`target rounded shadow ${
-                      loaded ? "" : "d-none"
-                    }`}
-                    alt="empty"
-                    src={image.url}
-                    onLoad={() => {
-                      // setLoaded(true);
-                      onLoad();
-                    }}
-                  />
-                  <HotspotWrap>
-                    <div
-                      className="image-overlay-onpopup rounded"
-                      style={
-                        popupModeMarkerSelected ? { opacity: 1 } : undefined
-                      }
-                    />
-
-                    {image.marker_positions.map((image_position, index) => (
-                      <React.Fragment key={index}>
-                        <Markers
-                          ref={(el) => (itemsRef.current[index] = el)}
-                          key={index}
-                          markers={image_position}
-                          popupViewEnabled={popupView}
-                          setSelectedMarker={setSelectedMarker}
-                          selectedMarker={selectedMarker}
-                          popupModeMarkerSelected={popupModeMarkerSelected}
-                          setPopupModeMarkerSelected={
-                            setPopupModeMarkerSelected
-                          }
-                          setShowToast={setShowToast}
-                        />
-                      </React.Fragment>
-                    ))}
-                  </HotspotWrap>
-
-                  <React.Fragment>
-                    {popups.map((data, index) => (
-                      <React.Fragment key={index}>
-                        {data.id ===
-                        parseInt(popupModeMarkerSelected.popupId) ? (
-                          <React.Fragment>
-                            <Popup
-                              key={index}
-                              data={data}
-                              popupContentChanged={popupContentChanged}
-                              setPopupEditMode={setPopupEditMode}
-                              setPopups={setPopups}
-                              setPopupModeMarkerSelected={
-                                setPopupModeMarkerSelected
-                              }
-                              positions={{
-                                top: image.marker_positions[index].top,
-                                left: image.marker_positions[index].left,
-                              }}
-                              newWidgetBeingAdded={newWidgetBeingAdded}
-                              addASlideInCarousel={addASlideInCarousel}
-                              deleteASlideInCarousel={deleteASlideInCarousel}
-                              updateASlideInCarousel={updateASlideInCarousel}
-                              updateCarouselSlidesOrder={
-                                updateCarouselSlidesOrder
-                              }
-                            />
-                          </React.Fragment>
-                        ) : undefined}
-                      </React.Fragment>
-                    ))}
-                  </React.Fragment>
-                </div>
-              </div>
-            </DragDropContext>
-          </div>
-        </HotspotImageContainer>
-      ) : (
-        <React.Fragment>
-          {!imageNotFoundError && (
-            <div className="text-center w-100 pt-5 mt-5 ">
-              <div className="spinner-grow text-primary p-3" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
-          )}
-        </React.Fragment>
-      )}
-      {imageNotFoundError && (
+      {imageNotFoundError ? (
         <div className="col-md-6 mx-auto mt-5 pt-3" role="alert">
           <div className="alert alert-danger" role="alert">
             {imageNotFoundErrorMessage}
           </div>
         </div>
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div
+            className="text-left rounded-right col-3 smoothTransition pl-0  pr-0 "
+            id="widgetPanel"
+          >
+            <div
+              className={`text-left bg-info rounded-right px-0 smoothTransition h-100 ${
+                selectedMarker || popupEditMode ? "col-md-12" : "col-md-4"
+              }`}
+            >
+              <ColorPicker
+                onColorSelected={onColorSelected}
+                selectedMarker={selectedMarker}
+                popupViewEnabled={popupView}
+              />
+
+              {popupEditMode && (
+                <PopupWidgets newWidgetBeingAdded={newWidgetBeingAdded} />
+              )}
+            </div>
+          </div>
+
+          <div className="mb-4 col-9 ">
+            {error && (
+              <div className="col-md-12 mx-auto " role="alert">
+                <div className="alert alert-danger" role="alert">
+                  {errorMessage}
+                </div>
+              </div>
+            )}
+
+            <MarkerEditorPanel
+              selectedMarker={selectedMarker}
+              addNewMarker={addNewMarker}
+              deleteMarker={deleteMarker}
+              popupViewEnabled={popupView}
+              enablePopupView={enablePopupView}
+              enableDraggableMode={enableDraggableMode}
+              popupEditMode={popupEditMode}
+              saveData={saveData}
+              imageId={image.id}
+            />
+            <Modal
+              imageId={image.id}
+              header={image.header}
+              copy={image.copy}
+              script={image.script}
+            />
+            <div
+              className="imageMarker shadow-lg"
+              id="imageMarkerWrapper"
+              style={
+                isPortrait
+                  ? { maxWidth: "850px", margin: "auto", minHeight: "450px" }
+                  : { maxWidth: "1080px", margin: "auto", minHeight: "450px" }
+              }
+            >
+              <Toast />
+
+              {imageLoaded ? null : <Loading message="Image Loading" />}
+
+              <img
+                ref={imageRef}
+                className={`target rounded shadow ${loaded ? "" : "d-none"}`}
+                alt="empty"
+                src={image.url}
+                onLoad={() => {
+                  // setLoaded(true);
+                  onLoad();
+                }}
+              />
+              <div className={`${imageLoaded ? "" : "d-none"}`}>
+                <HotspotWrap>
+                  <div
+                    className="image-overlay-onpopup rounded"
+                    style={popupModeMarkerSelected ? { opacity: 1 } : undefined}
+                  />
+
+                  {image.marker_positions.map((image_position, index) => (
+                    <React.Fragment key={index}>
+                      <Markers
+                        ref={(el) => (itemsRef.current[index] = el)}
+                        key={index}
+                        markers={image_position}
+                        popupViewEnabled={popupView}
+                        setSelectedMarker={setSelectedMarker}
+                        selectedMarker={selectedMarker}
+                        popupModeMarkerSelected={popupModeMarkerSelected}
+                        setPopupModeMarkerSelected={setPopupModeMarkerSelected}
+                      />
+                    </React.Fragment>
+                  ))}
+                </HotspotWrap>
+
+                <React.Fragment>
+                  {popups.map((data, index) => (
+                    <React.Fragment key={index}>
+                      {data.id === parseInt(popupModeMarkerSelected.popupId) ? (
+                        <React.Fragment>
+                          <Popup
+                            key={index}
+                            data={data}
+                            popupContentChanged={popupContentChanged}
+                            setPopupEditMode={setPopupEditMode}
+                            setPopups={setPopups}
+                            setPopupModeMarkerSelected={
+                              setPopupModeMarkerSelected
+                            }
+                            positions={{
+                              top: image.marker_positions[index].top,
+                              left: image.marker_positions[index].left,
+                            }}
+                            newWidgetBeingAdded={newWidgetBeingAdded}
+                            addASlideInCarousel={addASlideInCarousel}
+                            deleteASlideInCarousel={deleteASlideInCarousel}
+                            updateASlideInCarousel={updateASlideInCarousel}
+                            updateCarouselSlidesOrder={
+                              updateCarouselSlidesOrder
+                            }
+                          />
+                        </React.Fragment>
+                      ) : undefined}
+                    </React.Fragment>
+                  ))}
+                </React.Fragment>
+              </div>
+            </div>
+          </div>
+        </DragDropContext>
       )}
     </React.Fragment>
   );
 }
 
 export default HotspotImageEditor;
-
-const HotspotImageContainer = ({ children }) => (
-  <div className="container-fluid mt-4 ml-0" style={{ width: "95%" }}>
-    {children}
-  </div>
-);
 
 const HotspotWrap = ({ children }) => (
   <div className="points_wrap">{children}</div>
